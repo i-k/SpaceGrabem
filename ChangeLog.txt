@@ -1,0 +1,5 @@
+Version 0.01
+Ensimm‰inen toimiva versio.
+Kaikki luokat mit‰ sai irti alkuper‰isest‰ Spacegrabemist‰ on irrotettu.
+
+Tarvitaan viel‰ Pelaaja-luokka (esim. napit), jonkinlainen Kent‰nluoja-luokka (miss‰ kaikki tavarat ovat kent‰ss‰, kuinka iso kentt‰ on jne), Pylon/PylonTypes-luokat (esim. vetovoiman suunta/voimakkuus), Game-luokka (tuo kaikki tarvittavat luokat yhteen), main-luokka (k‰ynnist‰‰ pelin) sek‰ joku StaticObjects-luokka.
