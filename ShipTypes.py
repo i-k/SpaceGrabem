@@ -1,24 +1,21 @@
 import math
 
 from pandac.PandaModules import (
-  AmbientLight,
-  DirectionalLight,
   PointLight,
   NodePath,
   Vec3,
-  Vec4,
   Point3,
-  Quat,
-  OdeUtil,
-  OdeWorld,
-  OdeHashSpace,
-  OdeJointGroup,
+#  Quat,
+#  OdeUtil,
+#  OdeWorld,
+#  OdeHashSpace,
+#  OdeJointGroup,
   OdeMass,
   OdeBody,
   OdeSphereGeom,
-  OdeBoxGeom,
+#  OdeBoxGeom,
   BitMask32,
-  TextNode
+#  TextNode
 )
 
 from Ship import Ship

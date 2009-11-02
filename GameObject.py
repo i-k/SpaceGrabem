@@ -1,8 +1,8 @@
 
 from pandac.PandaModules import (
-  NodePath,
+#  NodePath,
   Vec3,
-  Point3,
+#  Point3,
 )
 
 class GameObject:

@@ -1,28 +1,33 @@
+import math
 from pandac.PandaModules import (
-  AmbientLight,
-  DirectionalLight,
-  PointLight,
+#  AmbientLight,
+#  DirectionalLight,
+#  PointLight,
   NodePath,
   Vec3,
-  Vec4,
-  Point3,
-  Quat,
-  OdeUtil,
-  OdeWorld,
-  OdeHashSpace,
-  OdeJointGroup,
-  OdeMass,
-  OdeBody,
-  OdeSphereGeom,
-  OdeBoxGeom,
-  BitMask32,
-  TextNode
+#  Vec4,
+#  Point3,
+#  Quat,
+#  OdeUtil,
+#  OdeWorld,
+#  OdeHashSpace,
+#  OdeJointGroup,
+#  OdeMass,
+#  OdeBody,
+#  OdeSphereGeom,
+#  OdeBoxGeom,
+#  BitMask32,
+#  TextNode
 )
 
 from GameObject import GameObject
 
 class Ship(GameObject):
     #POWER = 100
+        #lisaa aluksen listan alkuun
+    def addShipToList(self, shipList):
+        shipList[0:0] = [self]
+      
         
     def thrustOn(self):
         self.thrust = True

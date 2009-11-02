@@ -9,23 +9,23 @@ Versio: 0.01
 '''
 
 from pandac.PandaModules import (
-  AmbientLight,
+#  AmbientLight,
   DirectionalLight,
-  PointLight,
-  NodePath,
+#  PointLight,
+#  NodePath,
   Vec3,
   Vec4,
-  Point3,
-  Quat,
-  OdeUtil,
+#  Point3,
+#  Quat,
+#  OdeUtil,
   OdeWorld,
   OdeHashSpace,
   OdeJointGroup,
-  OdeMass,
-  OdeBody,
-  OdeSphereGeom,
-  OdeBoxGeom,
-  BitMask32,
+#  OdeMass,
+#  OdeBody,
+#  OdeSphereGeom,
+#  OdeBoxGeom,
+#  BitMask32,
   TextNode
 )
 
@@ -50,8 +50,19 @@ class Game:
         #self.wall = Wall(self)
         #self.wall.setPos( Vec3( 5, 0, 0) )
         
+        #alustaa tyhjan listan
+        self.shipList = []
         self.ship1 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.2, 0))
+        
         self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
+        
+        #lisataan alukset listaan
+        self.ship1.addShipToList(self.shipList)
+        self.ship2.addShipToList(self.shipList)
+
+        ##katsotaan saako toimimaan listana gamelooppiin -- saa
+       ##self.shipList = [self.ship1, self.ship2]
+        
         self.ship2.setPos( Vec3(10, 10, 0) )
         
         
@@ -62,6 +73,7 @@ class Game:
         self.pallo2 = CollectibleTypes.Pallo(self, Vec4(0.0, 0.3, 0.0, 0))
         self.pallo2.setPos( Vec3(30, 20, 0) )
         
+        self.collectibleList = [self.pallo, self.pallo2]
  
         
         base.setBackgroundColor(0,0,0.0,0)
@@ -128,20 +140,39 @@ class Game:
         light1.setColor( Vec4(0.5, 0.9, 0.9, 0) )
         render.setLight(lightNode1)
         
+    #checks all collectibles for possible collisions with ships
+    def checkAllCollectibles(self):
+        for collectible in self.collectibleList:
+            collectible.hitShips(self.shipList)
+
+    #updates all collectible positions
+    def updateAllCollectibles(self):
+        for collectible in self.collectibleList:
+            collectible.update(Game.UPDATE_RATE)
+    
+    #apply forces to all collectibles    
+    ## def applyForceAllCollectibles(self):
+        ## for collectible in self.collectibleList:
+            ## collectible.applyForces()
+    
+    def applyForceAllShips(self):
+        for ship in self.shipList:
+            ship.applyForces()
+            
+    #updates all ship positions
+    def updateAllShips(self):
+        for ship in self.shipList:
+            ship.update(Game.UPDATE_RATE)
         
         
     def loop(self, task):
-        self.ship1.applyForces()
-        self.ship2.applyForces()
+        self.applyForceAllShips()
         self.physicsSpace.autoCollide()
-        self.pallo.hitShips(self.ship1, self.ship2)
-        self.pallo2.hitShips(self.ship1, self.ship2)
+        self.checkAllCollectibles()
        # self.wall.osuminen(self.ship1)
         self.physicsWorld.quickStep(Game.UPDATE_RATE)
-        self.ship1.update(Game.UPDATE_RATE)
-        self.ship2.update(Game.UPDATE_RATE)
-        self.pallo.update(Game.UPDATE_RATE)
-        self.pallo2.update(Game.UPDATE_RATE)
+        self.updateAllShips()
+        self.updateAllCollectibles()
         self.contactGroup.empty()
         return task.cont
 
