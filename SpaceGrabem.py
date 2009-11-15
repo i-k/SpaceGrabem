@@ -9,6 +9,7 @@ Versio: 0.01
 '''
 
 from pandac.PandaModules import (
+<<<<<<< HEAD:SpaceGrabem.py
   AmbientLight,
   DirectionalLight,
   PointLight,
@@ -26,6 +27,25 @@ from pandac.PandaModules import (
   OdeSphereGeom,
   OdeBoxGeom,
   BitMask32,
+=======
+#  AmbientLight,
+  DirectionalLight,
+#  PointLight,
+#  NodePath,
+  Vec3,
+  Vec4,
+#  Point3,
+#  Quat,
+#  OdeUtil,
+  OdeWorld,
+  OdeHashSpace,
+  OdeJointGroup,
+#  OdeMass,
+#  OdeBody,
+#  OdeSphereGeom,
+#  OdeBoxGeom,
+#  BitMask32,
+>>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
   TextNode
 )
 
@@ -33,9 +53,16 @@ from direct.gui.OnscreenText import OnscreenText
 import direct.directbase.DirectStart
 
 
+<<<<<<< HEAD:SpaceGrabem.py
 
 import ShipTypes
 import CollectibleTypes
+=======
+from Base import Base
+import ShipTypes
+import CollectibleTypes
+import StaticObject
+>>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
 
 class Game:
 
@@ -43,15 +70,44 @@ class Game:
     UPDATE_RATE = 1/60.0
 
     def __init__(self):
+<<<<<<< HEAD:SpaceGrabem.py
+=======
+        base.disableMouse()
+        base.camera.setPos(0,0,240)
+        base.camera.lookAt(0,0,0)
+       
+>>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
         self.LoadHUD()
         self.loadPhysics()
         self.loadLights()
         
+<<<<<<< HEAD:SpaceGrabem.py
         #self.wall = Wall(self)
         #self.wall.setPos( Vec3( 5, 0, 0) )
         
         self.ship1 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.2, 0))
         self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
+=======
+        self.Base1 = Base(self)
+        self.Base1.setPos( Vec3( 0, 50, 0))
+        #self.Base2 = Base(self)
+        self.wall = StaticObject.bigWall(self)
+        self.wall.setPos( Vec3( 50, (-50), 0) )
+        self.wall.setRotation( 20 )
+        #alustaa tyhjan listan
+        self.shipList = []
+        self.ship1 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.2, 0))
+        
+        self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
+        
+        #lisataan alukset listaan
+        self.ship1.addShipToList(self.shipList)
+        self.ship2.addShipToList(self.shipList)
+
+        ##katsotaan saako toimimaan listana gamelooppiin -- saa
+       ##self.shipList = [self.ship1, self.ship2]
+        
+>>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
         self.ship2.setPos( Vec3(10, 10, 0) )
         
         
@@ -62,6 +118,10 @@ class Game:
         self.pallo2 = CollectibleTypes.Pallo(self, Vec4(0.0, 0.3, 0.0, 0))
         self.pallo2.setPos( Vec3(30, 20, 0) )
         
+<<<<<<< HEAD:SpaceGrabem.py
+=======
+        self.collectibleList = [self.pallo, self.pallo2]
+>>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
  
         
         base.setBackgroundColor(0,0,0.0,0)
@@ -128,6 +188,7 @@ class Game:
         light1.setColor( Vec4(0.5, 0.9, 0.9, 0) )
         render.setLight(lightNode1)
         
+<<<<<<< HEAD:SpaceGrabem.py
         
         
     def loop(self, task):
@@ -142,6 +203,41 @@ class Game:
         self.ship2.update(Game.UPDATE_RATE)
         self.pallo.update(Game.UPDATE_RATE)
         self.pallo2.update(Game.UPDATE_RATE)
+=======
+    #checks all collectibles for possible collisions with ships
+    def checkAllCollectibles(self):
+        for collectible in self.collectibleList:
+            collectible.hitShips(self.shipList)
+
+    #updates all collectible positions
+    def updateAllCollectibles(self):
+        for collectible in self.collectibleList:
+            collectible.update(Game.UPDATE_RATE)
+    
+    #apply forces to all collectibles    
+    ## def applyForceAllCollectibles(self):
+        ## for collectible in self.collectibleList:
+            ## collectible.applyForces()
+    
+    def applyForceAllShips(self):
+        for ship in self.shipList:
+            ship.applyForces()
+            
+    #updates all ship positions
+    def updateAllShips(self):
+        for ship in self.shipList:
+            ship.update(Game.UPDATE_RATE)
+        
+        
+    def loop(self, task):
+        self.applyForceAllShips()
+        self.physicsSpace.autoCollide()
+        self.checkAllCollectibles()
+        self.Base1.osuminen(self.ship1)
+        self.physicsWorld.quickStep(Game.UPDATE_RATE)
+        self.updateAllShips()
+        self.updateAllCollectibles()
+>>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
         self.contactGroup.empty()
         return task.cont
 

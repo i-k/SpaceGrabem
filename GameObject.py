@@ -1,10 +1,9 @@
-
 from pandac.PandaModules import (
-  NodePath,
+# NodePath,
   Vec3,
-  Point3,
+# Point3,
 )
-
+ 
 class GameObject:
     def update(self, dt):
         self.visualNode.setHpr( self.getHpr() )
@@ -21,10 +20,11 @@ class GameObject:
     def getHeading(self):
         return self.getHpr().getX()
         
-    #    def SetBoundary(self, x_, y_):
-    #        self.X = x_
-    #        self.Y = y_
+    # def SetBoundary(self, x_, y_):
+    # self.X = x_
+    # self.Y = y_
         
-    #    def OutOfBounds(self):
-    #        if self.self.X:
+    # def OutOfBounds(self):
+    # if self.self.X:
             
+ 

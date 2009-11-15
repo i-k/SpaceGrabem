@@ -1,29 +1,29 @@
 from pandac.PandaModules import (
-  AmbientLight,
-  DirectionalLight,
+# AmbientLight,
+# DirectionalLight,
   PointLight,
   NodePath,
   Vec3,
-  Vec4,
+# Vec4,
   Point3,
-  Quat,
-  OdeUtil,
-  OdeWorld,
-  OdeHashSpace,
-  OdeJointGroup,
+# Quat,
+# OdeUtil,
+# OdeWorld,
+# OdeHashSpace,
+# OdeJointGroup,
   OdeMass,
   OdeBody,
   OdeSphereGeom,
   OdeBoxGeom,
   BitMask32,
-  TextNode
+# TextNode
 )
-
+ 
 from Collectible import Collectible
-
+ 
 class Pallo(Collectible):
     
-    
+    COLLECTIBLE_TYPE = 'PointBall'
     def __init__(self, game, color):
         self.game = game
         
@@ -32,7 +32,7 @@ class Pallo(Collectible):
         self.visualNode.reparentTo(render)
         model = loader.loadModel('testipalikka.egg')
         model.reparentTo(self.visualNode)
-
+ 
         plight = PointLight('plight')
         plight.setPoint( Point3(0.6, 0, 5) )
         plight.setColor( color )
@@ -52,19 +52,21 @@ class Pallo(Collectible):
         self.collGeom.setCategoryBits( BitMask32(0xffffffff) )
         self.collGeom.setCollideBits( BitMask32(0xffffffff) )
     
-
+ 
     def PowerUpEffect(self, ship):
         ship.mass.add(self.mass)
         ship.addPower(-20)
+        #print player
         print ship.SHIP_TYPE + " lost 20 power!!"
         
+  # def releaseForces(self, ship):
         
        
-
-
-
-
-
+ 
+ 
+ 
+ 
     
-   # def outOfBounds(self, x, y):
-
+ 
+ 
+ 

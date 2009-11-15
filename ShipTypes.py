@@ -1,6 +1,7 @@
 import math
 
 from pandac.PandaModules import (
+<<<<<<< HEAD:ShipTypes.py
   AmbientLight,
   DirectionalLight,
   PointLight,
@@ -19,6 +20,23 @@ from pandac.PandaModules import (
   OdeBoxGeom,
   BitMask32,
   TextNode
+=======
+  PointLight,
+  NodePath,
+  Vec3,
+  Point3,
+#  Quat,
+#  OdeUtil,
+#  OdeWorld,
+#  OdeHashSpace,
+#  OdeJointGroup,
+  OdeMass,
+  OdeBody,
+  OdeSphereGeom,
+#  OdeBoxGeom,
+  BitMask32,
+#  TextNode
+>>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:ShipTypes.py
 )
 
 from Ship import Ship
@@ -165,9 +183,16 @@ class Ship_2(Ship):
 #            heading = self.getHeading()
 #            self.body.addForce(
 #               math.sin( math.radians(heading) ) * self.POWER,
+<<<<<<< HEAD:ShipTypes.py
 #              -math.cos( math.radians(heading) ) * self.POWER,
 #              0
 #            )
+=======
+#               -math.cos( math.radians(heading) ) * self.POWER,
+#               0
+#                  
+#               )
+>>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:ShipTypes.py
         self.rotating()
 
 
