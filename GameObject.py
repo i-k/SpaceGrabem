@@ -13,7 +13,12 @@ class GameObject:
     def setPos(self, pos):
         self.visualNode.setPos(pos)
         self.body.setPosition(pos)
+        
+    def hideObject(self):
+        self.visualNode.Hide()
     
+    def showObject(self):
+        pass
     def getHpr(self):
         return self.visualNode.getHpr()
     
