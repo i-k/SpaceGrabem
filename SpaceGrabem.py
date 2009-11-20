@@ -54,13 +54,15 @@ class Game:
         
         self.Base1 = Base(self)
         self.Base1.setPos( Vec3( 0, 50, 0))
+        self.Base2 = Base(self)
+        self.Base2.setPos( Vec3( 0, -50, 0))
         #self.Base2 = Base(self)
         self.wall = StaticObject.bigWall(self)
         self.wall.setPos( Vec3( 50, (-50), 0) )
         self.wall.setRotation( 20 )
         #alustaa tyhjan listan
         self.shipList = []
-        self.ship1 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.2, 0))
+        self.ship1 = ShipTypes.Ship_2(self, Vec4(1.0, 1.0, 1.0, 0))
         
         self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
         
@@ -178,6 +180,7 @@ class Game:
         self.physicsSpace.autoCollide()
         self.checkAllCollectibles()
         self.Base1.osuminen(self.ship1)
+        self.Base2.osuminen(self.ship2)
         self.physicsWorld.quickStep(Game.UPDATE_RATE)
         self.updateAllShips()
         self.updateAllCollectibles()

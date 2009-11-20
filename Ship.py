@@ -1,4 +1,4 @@
-import math
+import math, random
 from pandac.PandaModules import (
 #  AmbientLight,
 #  DirectionalLight,
@@ -29,7 +29,10 @@ class Ship(GameObject):
         shipList[0:0] = [self]
      
     POINTS = 0
-
+    Ball = None
+ 
+ #   hasBall = False
+    
     #gives points
     def getPoints(self):
         return self.POINTS
@@ -37,7 +40,22 @@ class Ship(GameObject):
     #Ads points
     def addPoints(self, amount):
         self.POINTS += amount
-      
+
+
+    def gotBall(self, ball):
+   #     self.hasBall = True
+        self.Ball = ball
+      #  self.Ball.setbody
+        
+        #TODO: switch 30 with width of map and 40 with height of map (global variables??)
+    def dropBall(self, x = random.randrange(30) ,y = random.randrange(40)):
+   #     self.hasBall = False
+        self.Ball.setPos( Vec3(x, y, 0))
+        self.Ball = None
+
+    def hasBall(self):
+        return (self.Ball is not None)
+        
         
     def thrustOn(self):
         self.thrust = True
@@ -63,8 +81,8 @@ class Ship(GameObject):
     def thrustBackOff(self):
         self.thrustBack = False
     
-    def universalBrake(self, body):
-        Velocity = self.body.getLinearVel() 
+#    def universalBrake(self, body):
+#        Velocity = self.body.getLinearVel() 
         
         
     def rotate(self, rotate):

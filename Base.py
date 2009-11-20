@@ -20,6 +20,8 @@ from pandac.PandaModules import (
 )
 
 from StaticObject import StaticObject
+#from CollectibleTypes import Restore
+
 
 class Base(StaticObject):
     
@@ -39,8 +41,10 @@ class Base(StaticObject):
     def checkCollision():
         pass
     
-    def osuminen(self, ship1):
-         if OdeUtil.collide(ship1.collGeom, self.collGeom):
- 
-            print "basee"
-            print "baseeee"
+    def osuminen(self, ship):
+         if OdeUtil.collide(ship.collGeom, self.collGeom):
+            if ship.hasBall():
+              ship.addPoints(ship.Ball.getValue())
+              ship.Ball.Restore(ship)
+              print ship.SHIP_TYPE + str(ship.getPoints()) + " Points! "
+              print " Base One! "

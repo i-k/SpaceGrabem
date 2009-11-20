@@ -1,3 +1,4 @@
+import random
 from pandac.PandaModules import (
 #  AmbientLight,
 #  DirectionalLight,
@@ -7,7 +8,7 @@ from pandac.PandaModules import (
 #  Vec4,
   Point3,
 #  Quat,
-#  OdeUtil,
+  OdeUtil,
 #  OdeWorld,
 #  OdeHashSpace,
 #  OdeJointGroup,
@@ -24,8 +25,13 @@ from Collectible import Collectible
 class Pallo(Collectible):
     
     COLLECTIBLE_TYPE = 'PointBall'
-    def __init__(self, game, color):
+ #   VALUE = 1
+ #   DRAIN = 20
+    
+    def __init__(self, game, color, value = 1, drain = 20):
         self.game = game
+        self.VALUE = value
+        self.DRAIN = drain
         
         
         self.visualNode = NodePath('Visual node')
@@ -52,12 +58,33 @@ class Pallo(Collectible):
         self.collGeom.setCategoryBits( BitMask32(0xffffffff) )
         self.collGeom.setCollideBits( BitMask32(0xffffffff) )
     
+    def getValue(self):
+        return self.VALUE
+    
+    def hitShips(self, shipList):
+        
+        for ship in shipList:
+         #get boundaries from somewhere and put the randrange to those
+            if OdeUtil.areConnected(ship.body, self.body) and not ship.hasBall():
+            
+                
+                self.PowerUpEffect(ship)
 
     def PowerUpEffect(self, ship):
-        ship.mass.add(self.mass)
-        ship.addPower(-20)
+     #   ship.mass.add(self.mass)
+        ship.addPower(-(self.DRAIN))
+        ship.gotBall(self)
+        
         #print player
-        print ship.SHIP_TYPE + " lost 20 power!!"
+        print ship.SHIP_TYPE + " lost " + str(self.DRAIN) + " power!!"
+        
+    def Restore(self, ship):
+      #  ship.mass.add(self.mass)
+        ship.addPower(self.DRAIN)
+        #self.setPos( Vec3(random.randrange(30), random.randrange(40), 0))
+        ship.dropBall()
+        #print player
+        print ship.SHIP_TYPE + " regained 20 power!!"
         
   #  def releaseForces(self, ship):
         

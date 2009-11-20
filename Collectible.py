@@ -53,6 +53,7 @@ class Collectible(GameObject):
         for ship in shipList:
          #get boundaries from somewhere and put the randrange to those
             if OdeUtil.areConnected(ship.body, self.body):
+            
                 self.setPos( Vec3(random.randrange(30), random.randrange(40), 0))
                 self.PowerUpEffect(ship)
     

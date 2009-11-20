@@ -28,7 +28,7 @@ class Ship_1(Ship):
     def __init__(self, game, color):
         #self.POWER = 100
         self.game = game
-        
+     #   self.hasBall = False
         self.thrust = False
         self.thrustLeft = False
         self.thrustRight = False
@@ -106,6 +106,7 @@ class Ship_2(Ship):
         self.POWER = 100
         self.game = game
         
+     #   self.hasBall = False
         self.thrust = False
         self.thrustLeft = False
         self.thrustRight = False
@@ -125,7 +126,7 @@ class Ship_2(Ship):
         
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
-        model = loader.loadModel('testipalikka.egg')
+        model = loader.loadModel('spaceship.egg')
         model.reparentTo(self.visualNode)
         
         plight = PointLight('plight')
