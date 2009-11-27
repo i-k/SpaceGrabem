@@ -38,13 +38,12 @@ class Base(StaticObject):
         model = loader.loadModel('testipalikka.egg')
         model.reparentTo(self.visualNode)
     
-    def checkCollision():
-        pass
+
     
-    def osuminen(self, ship):
-         if OdeUtil.collide(ship.collGeom, self.collGeom):
-            if ship.hasBall():
-              ship.addPoints(ship.Ball.getValue())
-              ship.Ball.Restore(ship)
-              print ship.SHIP_TYPE + str(ship.getPoints()) + " Points! "
-              print " Base One! "
+    def checkCollision(self, ship):
+         if OdeUtil.collide(ship.collGeom, self.collGeom) and ship.hasBall():
+            #if ship.hasBall():
+            ship.addPoints(ship.Ball.getValue())
+            ship.dropBall()
+            print ship.SHIP_TYPE + " " +  str(ship.getPoints()) + " Points! "
+            #print " Base One! "

@@ -9,25 +9,7 @@ Versio: 0.01
 '''
 
 from pandac.PandaModules import (
-<<<<<<< HEAD:SpaceGrabem.py
-  AmbientLight,
-  DirectionalLight,
-  PointLight,
-  NodePath,
-  Vec3,
-  Vec4,
-  Point3,
-  Quat,
-  OdeUtil,
-  OdeWorld,
-  OdeHashSpace,
-  OdeJointGroup,
-  OdeMass,
-  OdeBody,
-  OdeSphereGeom,
-  OdeBoxGeom,
-  BitMask32,
-=======
+
 #  AmbientLight,
   DirectionalLight,
 #  PointLight,
@@ -45,86 +27,86 @@ from pandac.PandaModules import (
 #  OdeSphereGeom,
 #  OdeBoxGeom,
 #  BitMask32,
->>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
+
   TextNode
 )
 
 from direct.gui.OnscreenText import OnscreenText
 import direct.directbase.DirectStart
 
-
-<<<<<<< HEAD:SpaceGrabem.py
-
-import ShipTypes
-import CollectibleTypes
-=======
 from Base import Base
+from Pylon import Pylon
+from Map import Map
 import ShipTypes
 import CollectibleTypes
 import StaticObject
->>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
 
-class Game:
 
-    HUD_TEXT_SCALE = 0.1
+class Game(Map):
+
+    HUD_TEXT_SCALE = 0.04
     UPDATE_RATE = 1/60.0
 
     def __init__(self):
-<<<<<<< HEAD:SpaceGrabem.py
-=======
+
         base.disableMouse()
-        base.camera.setPos(0,0,240)
+        base.camera.setPos(0,0,360)
         base.camera.lookAt(0,0,0)
        
->>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
         self.LoadHUD()
+        
         self.loadPhysics()
         self.loadLights()
         
-<<<<<<< HEAD:SpaceGrabem.py
-        #self.wall = Wall(self)
-        #self.wall.setPos( Vec3( 5, 0, 0) )
-        
-        self.ship1 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.2, 0))
-        self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
-=======
         self.Base1 = Base(self)
         self.Base1.setPos( Vec3( 0, 50, 0))
         self.Base2 = Base(self)
         self.Base2.setPos( Vec3( 0, -50, 0))
         #self.Base2 = Base(self)
-        self.wall = StaticObject.bigWall(self)
-        self.wall.setPos( Vec3( 50, (-50), 0) )
-        self.wall.setRotation( 20 )
+
         #alustaa tyhjan listan
         self.shipList = []
         self.ship1 = ShipTypes.Ship_2(self, Vec4(1.0, 1.0, 1.0, 0))
         
         self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
         
+        self.LoadHUD()
+        
         #lisataan alukset listaan
-        self.ship1.addShipToList(self.shipList)
-        self.ship2.addShipToList(self.shipList)
+        self.ship1.addToShipList(self.shipList)
+        self.ship2.addToShipList(self.shipList)
 
         ##katsotaan saako toimimaan listana gamelooppiin -- saa
        ##self.shipList = [self.ship1, self.ship2]
         
->>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
+
         self.ship2.setPos( Vec3(10, 10, 0) )
         
         
         self.setKeys()
         
+        self.collectibleList = []
         self.pallo = CollectibleTypes.Pallo(self, Vec4(0.0, 0.3, 0.0, 0))
         self.pallo.setPos( Vec3(0, 20, 0) )
+        self.pallo.addToCollectibleList(self.collectibleList)
+        
         self.pallo2 = CollectibleTypes.Pallo(self, Vec4(0.0, 0.3, 0.0, 0))
         self.pallo2.setPos( Vec3(30, 20, 0) )
+        self.pallo2.addToCollectibleList(self.collectibleList)
         
-<<<<<<< HEAD:SpaceGrabem.py
-=======
         self.collectibleList = [self.pallo, self.pallo2]
->>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
+        #self.collectibleList = [self.pallo, self.pallo2]
  
+        self.pylonList = []
+        self.pylon1 = Pylon(self, 100)
+        self.pylon1.setPos( Vec3(-30, 20, 0) )
+        self.pylon1.addToPylonList(self.pylonList)
+
+        self.pylon2 = Pylon(self, -100)
+        self.pylon2.setPos( Vec3(-30, -20, 0) )
+        self.pylon2.addToPylonList(self.pylonList)
+        
+        self.makeBoundaryWalls( 50.0, 50.0, 50.0)
         
         base.setBackgroundColor(0,0,0.0,0)
         
@@ -141,6 +123,7 @@ class Game:
         base.accept('arrow_right-up', self.ship1.thrustRightOff) 
         base.accept('arrow_down', self.ship1.thrustBackOn)
         base.accept('arrow_down-up', self.ship1.thrustBackOff) 
+        base.accept('rshift', self.ship1.releaseBall)
 
         base.accept('w', self.ship2.thrustOn)
         base.accept('w-up', self.ship2.thrustOff)
@@ -150,7 +133,7 @@ class Game:
         base.accept('d-up', self.ship2.thrustRightOff) 
         base.accept('s', self.ship2.thrustBackOn)
         base.accept('s-up', self.ship2.thrustBackOff) 
-
+        base.accept('q', self.ship2.releaseBall)
         
         
         
@@ -174,6 +157,24 @@ class Game:
         self.physicsSpace.setAutoCollideJointGroup(self.contactGroup)
 
     def LoadHUD(self):
+#        self.player1HUD = OnscreenText(
+#            text = "Player 1: " + str( self.ship1.getPoints() ),
+#            fg = (1,1,1,1),
+#            #pos = ( x, y )
+#            pos = (0.5,0.6),
+#            align = TextNode.ALeft,
+#            scale = Game.HUD_TEXT_SCALE
+#        )
+        
+#        self.player2HUD = OnscreenText(
+#            text = "Player 2: " + str( self.ship2.getPoints() ),
+#            fg = (1,1,1,1),
+#            pos = (-0.5,0.6),
+#            align = TextNode.ALeft,
+#            scale = Game.HUD_TEXT_SCALE
+#        )
+        
+        
         self.winnerText = OnscreenText(
             text = "Tekstia, tekstia, tekstia",
             fg = (1,1,1,1),
@@ -183,29 +184,30 @@ class Game:
         )
         self.winnerText.hide()
 
+#    def updateHUD(self):
+#        self.player1HUD = OnscreenText(
+#            text = "Player 1: " + str( self.ship1.getPoints() ),
+#            fg = (1,1,1,1),
+#            pos = (0.5,0.6),
+#            align = TextNode.ALeft,
+#            scale = Game.HUD_TEXT_SCALE
+#        )
+        
+#        self.player2HUD = OnscreenText(
+#            text = "Player 2: " + str( self.ship2.getPoints() ),
+#            fg = (1,1,1,1),
+#            pos = (-0.5,0.6),
+#            align = TextNode.ALeft,
+#            scale = Game.HUD_TEXT_SCALE
+#        )
+
     def loadLights(self):
         light1 = DirectionalLight('light1')
         lightNode1 = render.attachNewNode(light1)
         light1.setDirection( Vec3(-1, 0.5, -0.25) )
         light1.setColor( Vec4(0.5, 0.9, 0.9, 0) )
         render.setLight(lightNode1)
-        
-<<<<<<< HEAD:SpaceGrabem.py
-        
-        
-    def loop(self, task):
-        self.ship1.applyForces()
-        self.ship2.applyForces()
-        self.physicsSpace.autoCollide()
-        self.pallo.hitShips(self.ship1, self.ship2)
-        self.pallo2.hitShips(self.ship1, self.ship2)
-       # self.wall.osuminen(self.ship1)
-        self.physicsWorld.quickStep(Game.UPDATE_RATE)
-        self.ship1.update(Game.UPDATE_RATE)
-        self.ship2.update(Game.UPDATE_RATE)
-        self.pallo.update(Game.UPDATE_RATE)
-        self.pallo2.update(Game.UPDATE_RATE)
-=======
+
     #checks all collectibles for possible collisions with ships
     def checkAllCollectibles(self):
         for collectible in self.collectibleList:
@@ -229,18 +231,24 @@ class Game:
     def updateAllShips(self):
         for ship in self.shipList:
             ship.update(Game.UPDATE_RATE)
+            
+    #checks all pylons for possible collisions with ships
+    def checkAllPylons(self):
+        for pylon in self.pylonList:
+            pylon.checkCollisionList(self.shipList)
         
         
     def loop(self, task):
         self.applyForceAllShips()
         self.physicsSpace.autoCollide()
         self.checkAllCollectibles()
-        self.Base1.osuminen(self.ship1)
-        self.Base2.osuminen(self.ship2)
+        self.Base1.checkCollision(self.ship1)
+        self.Base2.checkCollision(self.ship2)
+        self.checkAllPylons()
+        
         self.physicsWorld.quickStep(Game.UPDATE_RATE)
         self.updateAllShips()
         self.updateAllCollectibles()
->>>>>>> 58af490611cf141600d95927f7ab641fe8f7171a:SpaceGrabem.py
         self.contactGroup.empty()
         return task.cont
 

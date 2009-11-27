@@ -24,16 +24,17 @@ from Collectible import Collectible
  
 class Pallo(Collectible):
     
-    COLLECTIBLE_TYPE = 'PointBall'
+ #   COLLECTIBLE_TYPE = 'PointBall'
  #   VALUE = 1
  #   DRAIN = 20
+
     
     def __init__(self, game, color, value = 1, drain = 20):
         self.game = game
         self.VALUE = value
         self.DRAIN = drain
         
-        
+        #self.idnumber = id
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
         model = loader.loadModel('testipalikka.egg')
@@ -71,13 +72,18 @@ class Pallo(Collectible):
     def PowerUpEffect(self, ship):
         ship.addPower(-(self.DRAIN))
         ship.gotBall(self)
+        self.hideObject()
         
         print ship.SHIP_TYPE + " lost " + str(self.DRAIN) + " power!!"
         
     def Restore(self, ship):
         ship.addPower(self.DRAIN)
-        ship.dropBall()
+
+        self.showObject()
+        #self.setPos( Vec3(random.randrange(30), random.randrange(40), 0))
+        #ship.dropBall()
+
         #print player
-        print ship.SHIP_TYPE + " regained 20 power!!"
+        print ship.getShipType() + " regained 20 power!!"
         
   # def releaseForces(self, ship):

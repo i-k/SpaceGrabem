@@ -35,17 +35,28 @@ class Collectible(GameObject):
     #new collectible always added to start of list,
     #but can't be sure that the collectible that
     #needs to be deleted will still be the first
+    
+    #if-lause, kay lapi koko listan, tutkii id-numeron?
+    #jos id numero = poistettavan id numero, poistetaan?
+    
+#    idnumber = 0
        
-  # def ID(self):
-   # return self.idnumber
+    def getID(self):
+        return self.idnumber
     
-  # def addID(self):
-   # self.idnumber += 1
-    #lisaa collectiblen listan alkuun
-  # def addCollectibleToList(self, collectibleList):
-   # collectibleList[0:0] = [self]
+#    def addToID(self):
+#        self.idnumber += 1
+        
+    #lisaa collectiblen listaan
+    def addToCollectibleList(self, collectibleList):
+        collectibleList.append(self)
     
-  # def removeCollectibleFromList(self, collectibleList):
+    def removeFromCollectibleList(self, collectibleList, id):  
+        i = 0
+        for collectible in collectibleList:
+            if collectible.getID() == id:
+                return collectibleList.pop(i)
+        i += 1        
         
     def hitShips(self, shipList):
         
@@ -69,8 +80,4 @@ class Collectible(GameObject):
     def PowerUpEffect(self, ship):
         pass
     #print "ZE GOGGLES!! ZEY DO NOZING!!!"
-        
-        
- 
-      # def outOfBounds(self, x, y):
  

@@ -10,6 +10,9 @@ OdeUtil
 
 class StaticObject(GameObject):
 
+    def getPos(self):
+        return self.collGeom.getPosition()
+    
     def setPos(self, pos):
         self.visualNode.setPos( pos )
         self.collGeom.setPosition( pos )
@@ -19,7 +22,6 @@ class StaticObject(GameObject):
         self.rotation = rotate
         self.update()
                
-    #experiment so the model turns as much as the hitbox
     def update(self):
         self.visualNode.setHpr( Vec3(self.rotation, 0, 0) )
         pos = self.collGeom.getRotation()
