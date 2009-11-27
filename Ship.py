@@ -24,13 +24,16 @@ from GameObject import GameObject
 
 class Ship(GameObject):
     #POWER = 100
-        #lisaa aluksen listan alkuun
-    def addShipToList(self, shipList):
-        shipList[0:0] = [self]
-     
+        #lisaa aluksen listaan
+    def addToShipList(self, shipList):
+        shipList.append(self)
+    
+    SHIP_TYPE = None
+    POWER = 100
     POINTS = 0
     Ball = None
- 
+    Ball_offset = 5.0
+    
  #   hasBall = False
     
     #gives points
@@ -45,17 +48,25 @@ class Ship(GameObject):
     def gotBall(self, ball):
    #     self.hasBall = True
         self.Ball = ball
+        
       #  self.Ball.setbody
         
         #TODO: switch 30 with width of map and 40 with height of map (global variables??)
     def dropBall(self, x = random.randrange(30) ,y = random.randrange(40)):
    #     self.hasBall = False
+        self.Ball.Restore(self)
         self.Ball.setPos( Vec3(x, y, 0))
+        #self.Ball.showObject()
         self.Ball = None
 
     def hasBall(self):
         return (self.Ball is not None)
+    
+    def getOffset(self):
+        return self.Ball_offset
         
+    def getShipType(self):
+        return self.SHIP_TYPE
         
     def thrustOn(self):
         self.thrust = True
@@ -81,6 +92,17 @@ class Ship(GameObject):
     def thrustBackOff(self):
         self.thrustBack = False
     
+    def releaseBall(self):
+        if self.hasBall():
+            linearVector = self.body.getLinearVel()
+            heading = self.getHpr()
+            position = self.getPos()
+            x = position[0] + (-math.sin(math.radians(heading[0])) * self.getOffset())
+            y = position[1] + (math.cos(math.radians(heading[1])) * self.getOffset())
+            
+            self.Ball.setVelocity(linearVector[0], linearVector[1])
+            self.dropBall( x, y )
+            
 #    def universalBrake(self, body):
 #        Velocity = self.body.getLinearVel() 
         

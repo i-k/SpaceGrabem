@@ -34,21 +34,24 @@ import direct.directbase.DirectStart
 
 
 from Base import Base
+from Pylon import Pylon
+from Map import Map
 import ShipTypes
 import CollectibleTypes
 import StaticObject
 
-class Game:
 
-    HUD_TEXT_SCALE = 0.1
+class Game(Map):
+
+    HUD_TEXT_SCALE = 0.04
     UPDATE_RATE = 1/60.0
 
     def __init__(self):
         base.disableMouse()
-        base.camera.setPos(0,0,240)
+        base.camera.setPos(0,0,360)
         base.camera.lookAt(0,0,0)
        
-        self.LoadHUD()
+        
         self.loadPhysics()
         self.loadLights()
         
@@ -57,18 +60,25 @@ class Game:
         self.Base2 = Base(self)
         self.Base2.setPos( Vec3( 0, -50, 0))
         #self.Base2 = Base(self)
-        self.wall = StaticObject.bigWall(self)
-        self.wall.setPos( Vec3( 50, (-50), 0) )
-        self.wall.setRotation( 20 )
+#        self.wall1 = StaticObject.bigWall(self)
+#        self.wall1.setPos( Vec3( 50, (-50), 0) )
+#        self.wall1.setRotation( 90 )
+#        
+#        self.wall2 = StaticObject.bigWall(self)
+#        self.wall2.setPos( Vec3( 50, 0, 0) )
+#        self.wall2.setRotation( 90 )
+
         #alustaa tyhjan listan
         self.shipList = []
         self.ship1 = ShipTypes.Ship_2(self, Vec4(1.0, 1.0, 1.0, 0))
         
         self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
         
+        self.LoadHUD()
+        
         #lisataan alukset listaan
-        self.ship1.addShipToList(self.shipList)
-        self.ship2.addShipToList(self.shipList)
+        self.ship1.addToShipList(self.shipList)
+        self.ship2.addToShipList(self.shipList)
 
         ##katsotaan saako toimimaan listana gamelooppiin -- saa
        ##self.shipList = [self.ship1, self.ship2]
@@ -78,13 +88,27 @@ class Game:
         
         self.setKeys()
         
+        self.collectibleList = []
         self.pallo = CollectibleTypes.Pallo(self, Vec4(0.0, 0.3, 0.0, 0))
         self.pallo.setPos( Vec3(0, 20, 0) )
+        self.pallo.addToCollectibleList(self.collectibleList)
+        
         self.pallo2 = CollectibleTypes.Pallo(self, Vec4(0.0, 0.3, 0.0, 0))
         self.pallo2.setPos( Vec3(30, 20, 0) )
+        self.pallo2.addToCollectibleList(self.collectibleList)
         
-        self.collectibleList = [self.pallo, self.pallo2]
+        #self.collectibleList = [self.pallo, self.pallo2]
  
+        self.pylonList = []
+        self.pylon1 = Pylon(self, 100)
+        self.pylon1.setPos( Vec3(-30, 20, 0) )
+        self.pylon1.addToPylonList(self.pylonList)
+
+        self.pylon2 = Pylon(self, -100)
+        self.pylon2.setPos( Vec3(-30, -20, 0) )
+        self.pylon2.addToPylonList(self.pylonList)
+        
+        self.makeBoundaryWalls( 50.0, 50.0, 50.0)
         
         base.setBackgroundColor(0,0,0.0,0)
         
@@ -101,6 +125,7 @@ class Game:
         base.accept('arrow_right-up', self.ship1.thrustRightOff) 
         base.accept('arrow_down', self.ship1.thrustBackOn)
         base.accept('arrow_down-up', self.ship1.thrustBackOff) 
+        base.accept('rshift', self.ship1.releaseBall)
 
         base.accept('w', self.ship2.thrustOn)
         base.accept('w-up', self.ship2.thrustOff)
@@ -110,7 +135,7 @@ class Game:
         base.accept('d-up', self.ship2.thrustRightOff) 
         base.accept('s', self.ship2.thrustBackOn)
         base.accept('s-up', self.ship2.thrustBackOff) 
-
+        base.accept('q', self.ship2.releaseBall)
         
         
         
@@ -134,6 +159,24 @@ class Game:
         self.physicsSpace.setAutoCollideJointGroup(self.contactGroup)
 
     def LoadHUD(self):
+#        self.player1HUD = OnscreenText(
+#            text = "Player 1: " + str( self.ship1.getPoints() ),
+#            fg = (1,1,1,1),
+#            #pos = ( x, y )
+#            pos = (0.5,0.6),
+#            align = TextNode.ALeft,
+#            scale = Game.HUD_TEXT_SCALE
+#        )
+        
+#        self.player2HUD = OnscreenText(
+#            text = "Player 2: " + str( self.ship2.getPoints() ),
+#            fg = (1,1,1,1),
+#            pos = (-0.5,0.6),
+#            align = TextNode.ALeft,
+#            scale = Game.HUD_TEXT_SCALE
+#        )
+        
+        
         self.winnerText = OnscreenText(
             text = "Tekstia, tekstia, tekstia",
             fg = (1,1,1,1),
@@ -142,6 +185,23 @@ class Game:
             scale = Game.HUD_TEXT_SCALE
         )
         self.winnerText.hide()
+
+#    def updateHUD(self):
+#        self.player1HUD = OnscreenText(
+#            text = "Player 1: " + str( self.ship1.getPoints() ),
+#            fg = (1,1,1,1),
+#            pos = (0.5,0.6),
+#            align = TextNode.ALeft,
+#            scale = Game.HUD_TEXT_SCALE
+#        )
+        
+#        self.player2HUD = OnscreenText(
+#            text = "Player 2: " + str( self.ship2.getPoints() ),
+#            fg = (1,1,1,1),
+#            pos = (-0.5,0.6),
+#            align = TextNode.ALeft,
+#            scale = Game.HUD_TEXT_SCALE
+#        )
 
     def loadLights(self):
         light1 = DirectionalLight('light1')
@@ -173,14 +233,21 @@ class Game:
     def updateAllShips(self):
         for ship in self.shipList:
             ship.update(Game.UPDATE_RATE)
+            
+    #checks all pylons for possible collisions with ships
+    def checkAllPylons(self):
+        for pylon in self.pylonList:
+            pylon.checkCollisionList(self.shipList)
         
         
     def loop(self, task):
         self.applyForceAllShips()
         self.physicsSpace.autoCollide()
         self.checkAllCollectibles()
-        self.Base1.osuminen(self.ship1)
-        self.Base2.osuminen(self.ship2)
+        self.Base1.checkCollision(self.ship1)
+        self.Base2.checkCollision(self.ship2)
+        self.checkAllPylons()
+        
         self.physicsWorld.quickStep(Game.UPDATE_RATE)
         self.updateAllShips()
         self.updateAllCollectibles()

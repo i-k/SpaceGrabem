@@ -22,12 +22,14 @@ from Ship import Ship
 
 class Ship_1(Ship):
     
-    POWER = 100
-    SHIP_TYPE = "UFO"
+
+    
     
     def __init__(self, game, color):
-        #self.POWER = 100
+        self.POWER = 100
         self.game = game
+        self.SHIP_TYPE = "UFO"
+        self.Ball_offset = 10.0
      #   self.hasBall = False
         self.thrust = False
         self.thrustLeft = False
@@ -99,13 +101,13 @@ class Ship_2(Ship):
     
     ROTATING_SPEED = 1
     MAX_ROTATE_SPEED = 3.0
-    SHIP_TYPE = "RAKETTI"
+   
     
     def __init__(self, game, color):
 
         self.POWER = 100
         self.game = game
-        
+        self.SHIP_TYPE = "RAKETTI"
      #   self.hasBall = False
         self.thrust = False
         self.thrustLeft = False
