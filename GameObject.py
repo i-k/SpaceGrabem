@@ -1,9 +1,10 @@
+
 from pandac.PandaModules import (
-# NodePath,
+#  NodePath,
   Vec3,
-# Point3,
+#  Point3,
 )
- 
+
 class GameObject:
     def update(self, dt):
         self.visualNode.setHpr( self.getHpr() )
@@ -19,11 +20,11 @@ class GameObject:
         
     def hideObject(self):
         self.visualNode.hide()
-        self.body.disable()
+        self.collGeom.disable()
     
     def showObject(self):
         self.visualNode.show()
-        self.body.enable()
+        self.collGeom.enable()
     
     def getHpr(self):
         return self.visualNode.getHpr()
@@ -34,11 +35,10 @@ class GameObject:
     def getPos(self):
         return self.body.getPosition()
         
-    # def SetBoundary(self, x_, y_):
-    # self.X = x_
-    # self.Y = y_
+    #    def SetBoundary(self, x_, y_):
+    #        self.X = x_
+    #        self.Y = y_
         
-    # def OutOfBounds(self):
-    # if self.self.X:
+    #    def OutOfBounds(self):
+    #        if self.self.X:
             
- 
