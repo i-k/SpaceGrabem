@@ -1,11 +1,11 @@
 import random
 from pandac.PandaModules import (
-# AmbientLight,
-# DirectionalLight,
+#  AmbientLight,
+#  DirectionalLight,
   PointLight,
   NodePath,
   Vec3,
-# Vec4,
+#  Vec4,
   Point3,
 #  Quat,
   OdeUtil,
@@ -17,11 +17,11 @@ from pandac.PandaModules import (
   OdeSphereGeom,
   OdeBoxGeom,
   BitMask32,
-# TextNode
+#  TextNode
 )
- 
+
 from Collectible import Collectible
- 
+
 class Pallo(Collectible):
     
  #   COLLECTIBLE_TYPE = 'PointBall'
@@ -39,7 +39,7 @@ class Pallo(Collectible):
         self.visualNode.reparentTo(render)
         model = loader.loadModel('testipalikka.egg')
         model.reparentTo(self.visualNode)
- 
+
         plight = PointLight('plight')
         plight.setPoint( Point3(0.6, 0, 5) )
         plight.setColor( color )
@@ -67,23 +67,35 @@ class Pallo(Collectible):
         for ship in shipList:
          #get boundaries from somewhere and put the randrange to those
             if OdeUtil.areConnected(ship.body, self.body) and not ship.hasBall():
+            
+                
                 self.PowerUpEffect(ship)
 
     def PowerUpEffect(self, ship):
+     #   ship.mass.add(self.mass)
         ship.addPower(-(self.DRAIN))
         ship.gotBall(self)
         self.hideObject()
         
+        #print player
         print ship.SHIP_TYPE + " lost " + str(self.DRAIN) + " power!!"
         
     def Restore(self, ship):
+      #  ship.mass.add(self.mass)
         ship.addPower(self.DRAIN)
-
         self.showObject()
         #self.setPos( Vec3(random.randrange(30), random.randrange(40), 0))
         #ship.dropBall()
-
         #print player
         print ship.getShipType() + " regained 20 power!!"
         
-  # def releaseForces(self, ship):
+  #  def releaseForces(self, ship):
+        
+       
+
+
+
+
+    
+ 
+
