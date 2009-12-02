@@ -1,27 +1,27 @@
 import math, random
 from pandac.PandaModules import (
-# AmbientLight,
-# DirectionalLight,
-# PointLight,
+#  AmbientLight,
+#  DirectionalLight,
+#  PointLight,
   NodePath,
   Vec3,
-# Vec4,
-# Point3,
-# Quat,
-# OdeUtil,
-# OdeWorld,
-# OdeHashSpace,
-# OdeJointGroup,
-# OdeMass,
-# OdeBody,
-# OdeSphereGeom,
-# OdeBoxGeom,
-# BitMask32,
-# TextNode
+#  Vec4,
+#  Point3,
+#  Quat,
+#  OdeUtil,
+#  OdeWorld,
+#  OdeHashSpace,
+#  OdeJointGroup,
+#  OdeMass,
+#  OdeBody,
+#  OdeSphereGeom,
+#  OdeBoxGeom,
+#  BitMask32,
+#  TextNode
 )
- 
+
 from GameObject import GameObject
- 
+
 class Ship(GameObject):
     #POWER = 100
         #lisaa aluksen listaan
@@ -31,37 +31,30 @@ class Ship(GameObject):
     SHIP_TYPE = None
     POWER = 100
     POINTS = 0
-
     Ball = None
     Ball_offset = 5.0
     
  #   hasBall = False
-
     
     #gives points
     def getPoints(self):
         return self.POINTS
- 
+
     #Ads points
     def addPoints(self, amount):
         self.POINTS += amount
 
 
     def gotBall(self, ball):
+   #     self.hasBall = True
         self.Ball = ball
-
         
       #  self.Ball.setbody
-
         
-    #TODO: switch 30 with width of map and 40 with height of map (global variables??)
-    # change to dropBall(self, [x, y]) or create a helper method for getting the ships
-    #x and y without self.body.getPosition()
+        #TODO: switch 30 with width of map and 40 with height of map (global variables??)
     def dropBall(self, x = random.randrange(30) ,y = random.randrange(40)):
-
    #     self.hasBall = False
         self.Ball.Restore(self)
-
         self.Ball.setPos( Vec3(x, y, 0))
         #self.Ball.showObject()
         self.Ball = None
@@ -98,15 +91,21 @@ class Ship(GameObject):
             
     def thrustBackOff(self):
         self.thrustBack = False
-
     
     def releaseBall(self):
+        #releases ball behind the ship
         if self.hasBall():
             linearVector = self.body.getLinearVel()
             heading = self.getHpr()
             position = self.getPos()
-            x = position[0] + (-math.sin(math.radians(heading[0])) * self.getOffset())
-            y = position[1] + (math.cos(math.radians(heading[1])) * self.getOffset())
+            x = position[0] + (math.sin(math.radians(heading[0])) * self.getOffset())
+            y = position[1] + (-math.cos(math.radians(heading[0])) * self.getOffset())
+            
+#ihme miten auttaa kun koittaa hieman katsoa mita lukuja tuolta tulee
+#            print str(heading[0]) + " heading x of ship"
+#            print str(heading[1]) + " heading y of ship"
+#            print str(x) + " x of ball test debug joo"
+#            print str(y) + " y something"
             
             self.Ball.setVelocity(linearVector[0], linearVector[1])
             self.dropBall( x, y )
@@ -114,7 +113,6 @@ class Ship(GameObject):
 #    def universalBrake(self, body):
 #        Velocity = self.body.getLinearVel() 
         
-
         
     def rotate(self, rotate):
         self.rotation += rotate
