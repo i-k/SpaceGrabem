@@ -38,7 +38,7 @@ class bigWall(StaticObject):
         self.game = game
         
         
-        self.collGeom = OdeBoxGeom( self.game.physicsSpace, 50, 2, 2)
+        self.collGeom = OdeBoxGeom( self.game.physicsSpace, 50, 4, 4)
         #self.collGeom.setBody(self.body)
         self.collGeom.setCategoryBits( BitMask32(0x000000ff) )#ffffffff) )
         self.collGeom.setCollideBits( BitMask32(0x000000ff) )
