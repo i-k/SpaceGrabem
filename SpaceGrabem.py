@@ -9,7 +9,6 @@ Versio: 0.01
 '''
 
 from pandac.PandaModules import (
-
 #  AmbientLight,
   DirectionalLight,
 #  PointLight,
@@ -27,42 +26,53 @@ from pandac.PandaModules import (
 #  OdeSphereGeom,
 #  OdeBoxGeom,
 #  BitMask32,
-
   TextNode
 )
 
 from direct.gui.OnscreenText import OnscreenText
 import direct.directbase.DirectStart
 
-from Base import Base
-from Pylon import Pylon
+
+#from Base import Base
+#from Pylon import Pylon
 from Map import Map
 import ShipTypes
 import CollectibleTypes
-import StaticObject
+#import StaticObject
 
 
-class Game(Map):
+class Game():
 
     HUD_TEXT_SCALE = 0.04
     UPDATE_RATE = 1/60.0
 
     def __init__(self):
-
         base.disableMouse()
-        base.camera.setPos(0,0,360)
+        base.camera.setPos(0,0,640)
         base.camera.lookAt(0,0,0)
        
-        self.LoadHUD()
         
         self.loadPhysics()
         self.loadLights()
         
-        self.Base1 = Base(self)
-        self.Base1.setPos( Vec3( 0, 50, 0))
-        self.Base2 = Base(self)
-        self.Base2.setPos( Vec3( 0, -50, 0))
+        #map x boundary, map y boundary, amount of pylons
+        self.map = Map(self, 160.0, 160.0, 7)
+        
+
+        
+        
+#        self.Base1 = Base(self)
+#        self.Base1.setPos( Vec3( 0, 50, 0))
+#        self.Base2 = Base(self)
+#        self.Base2.setPos( Vec3( 0, -50, 0))
         #self.Base2 = Base(self)
+#        self.wall1 = StaticObject.bigWall(self)
+#        self.wall1.setPos( Vec3( 50, (-50), 0) )
+#        self.wall1.setRotation( 90 )
+#        
+#        self.wall2 = StaticObject.bigWall(self)
+#        self.wall2.setPos( Vec3( 50, 0, 0) )
+#        self.wall2.setRotation( 90 )
 
         #alustaa tyhjan listan
         self.shipList = []
@@ -79,7 +89,6 @@ class Game(Map):
         ##katsotaan saako toimimaan listana gamelooppiin -- saa
        ##self.shipList = [self.ship1, self.ship2]
         
-
         self.ship2.setPos( Vec3(10, 10, 0) )
         
         
@@ -94,19 +103,18 @@ class Game(Map):
         self.pallo2.setPos( Vec3(30, 20, 0) )
         self.pallo2.addToCollectibleList(self.collectibleList)
         
-        self.collectibleList = [self.pallo, self.pallo2]
         #self.collectibleList = [self.pallo, self.pallo2]
  
-        self.pylonList = []
-        self.pylon1 = Pylon(self, 100)
-        self.pylon1.setPos( Vec3(-30, 20, 0) )
-        self.pylon1.addToPylonList(self.pylonList)
+#        self.pylonList = []
+#        self.pylon1 = Pylon(self, 100)
+#        self.pylon1.setPos( Vec3(-30, 20, 0) )
+#        self.pylon1.addToPylonList(self.pylonList)
 
-        self.pylon2 = Pylon(self, -100)
-        self.pylon2.setPos( Vec3(-30, -20, 0) )
-        self.pylon2.addToPylonList(self.pylonList)
+#        self.pylon2 = Pylon(self, -100)
+#        self.pylon2.setPos( Vec3(-30, -20, 0) )
+#        self.pylon2.addToPylonList(self.pylonList)
         
-        self.makeBoundaryWalls( 50.0, 50.0, 50.0)
+#        self.makeBoundaryWalls( 50.0, 50.0, 50.0)
         
         base.setBackgroundColor(0,0,0.0,0)
         
@@ -207,7 +215,7 @@ class Game(Map):
         light1.setDirection( Vec3(-1, 0.5, -0.25) )
         light1.setColor( Vec4(0.5, 0.9, 0.9, 0) )
         render.setLight(lightNode1)
-
+        
     #checks all collectibles for possible collisions with ships
     def checkAllCollectibles(self):
         for collectible in self.collectibleList:
@@ -234,7 +242,7 @@ class Game(Map):
             
     #checks all pylons for possible collisions with ships
     def checkAllPylons(self):
-        for pylon in self.pylonList:
+        for pylon in self.map.getPylonList():
             pylon.checkCollisionList(self.shipList)
         
         
@@ -242,8 +250,8 @@ class Game(Map):
         self.applyForceAllShips()
         self.physicsSpace.autoCollide()
         self.checkAllCollectibles()
-        self.Base1.checkCollision(self.ship1)
-        self.Base2.checkCollision(self.ship2)
+        self.map.getBase1().checkCollision(self.ship1)
+        self.map.getBase2().checkCollision(self.ship2)
         self.checkAllPylons()
         
         self.physicsWorld.quickStep(Game.UPDATE_RATE)
