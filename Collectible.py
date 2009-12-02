@@ -1,33 +1,34 @@
+
 import random
- 
+
 from pandac.PandaModules import (
-# AmbientLight,
-# DirectionalLight,
-# PointLight,
-# NodePath,
+#  AmbientLight,
+#  DirectionalLight,
+#  PointLight,
+#  NodePath,
   Vec3,
-# Vec4,
-# Point3,
-# Quat,
+#  Vec4,
+#  Point3,
+#  Quat,
   OdeUtil,
-# OdeWorld,
-# OdeHashSpace,
-# OdeJointGroup,
-# OdeMass,
-# OdeBody,
-# OdeSphereGeom,
-# OdeBoxGeom,
-# BitMask32,
-# TextNode
+#  OdeWorld,
+#  OdeHashSpace,
+#  OdeJointGroup,
+#  OdeMass,
+#  OdeBody,
+#  OdeSphereGeom,
+#  OdeBoxGeom,
+#  BitMask32,
+#  TextNode
 )
- 
+
 from GameObject import GameObject
- 
+
 class Collectible(GameObject):
    
    
     #selvita miten saisi jonkun id:n joka collectible-oliolle
-    #tarvitaan etta voidaan poistaa vain se tietty olio
+    #tarvitaan etta voidaan poistaa vain se tietty olio 
     #listasta
     
     #ongelmana on etta voi olla eri maara collectibleja
@@ -58,6 +59,7 @@ class Collectible(GameObject):
                 return collectibleList.pop(i)
         i += 1        
         
+        
     def hitShips(self, shipList):
         
         for ship in shipList:
@@ -80,4 +82,7 @@ class Collectible(GameObject):
     def PowerUpEffect(self, ship):
         pass
     #print "ZE GOGGLES!! ZEY DO NOZING!!!"
+        
+        
  
+      # def outOfBounds(self, x, y):

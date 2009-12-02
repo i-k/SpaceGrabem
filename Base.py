@@ -47,3 +47,6 @@ class Base(StaticObject):
             ship.dropBall()
             print ship.SHIP_TYPE + " " +  str(ship.getPoints()) + " Points! "
             #print " Base One! "
+            
+    def addToBaseList(self, baseList):
+        baseList.append(self)
