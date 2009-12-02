@@ -1,7 +1,6 @@
 import math
 
 from pandac.PandaModules import (
-
   PointLight,
   NodePath,
   Vec3,
@@ -17,7 +16,6 @@ from pandac.PandaModules import (
 #  OdeBoxGeom,
   BitMask32,
 #  TextNode
-
 )
 
 from Ship import Ship
@@ -110,6 +108,7 @@ class Ship_2(Ship):
         self.POWER = 100
         self.game = game
         self.SHIP_TYPE = "RAKETTI"
+        self.Ball_offset = 6.0
      #   self.hasBall = False
         self.thrust = False
         self.thrustLeft = False
@@ -167,12 +166,10 @@ class Ship_2(Ship):
 #            heading = self.getHeading()
 #            self.body.addForce(
 #               math.sin( math.radians(heading) ) * self.POWER,
-
 #               -math.cos( math.radians(heading) ) * self.POWER,
 #               0
 #                  
 #               )
-
         self.rotating()
 
 
