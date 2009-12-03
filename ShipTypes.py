@@ -130,8 +130,9 @@ class Ship_2(Ship):
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
         model = loader.loadModel('spaceship.egg')
+        model.setH(180)
         model.reparentTo(self.visualNode)
-        
+        self.visualNode.setScale(0.5)
         plight = PointLight('plight')
         plight.setPoint( Point3(0.6, 0, 5) )
         plight.setColor( color )
