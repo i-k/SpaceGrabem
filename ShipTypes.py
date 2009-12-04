@@ -4,6 +4,7 @@ from pandac.PandaModules import (
   PointLight,
   NodePath,
   Vec3,
+  Vec4,
   Point3,
 #  Quat,
 #  OdeUtil,
@@ -140,8 +141,11 @@ class Ship_2(Ship):
         plightNodePath = model.attachNewNode(plight)
         model.setLight(plightNodePath)
 
-
-
+        afterburner = PointLight('afterburner')
+        afterburner.setPoint( Point3( 0, 10, 5) )
+        afterburner.setColor( Vec4(1.0, 0.0, 0, 0) )
+        afterburner.setAttenuation( Vec3(0, 0, 0) )
+        model.setLight(model.attachNewNode(afterburner))
     
     
     def rotating(self):

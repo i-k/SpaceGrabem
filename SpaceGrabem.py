@@ -76,7 +76,7 @@ class Game():
 
         #alustaa tyhjan listan
         self.shipList = []
-        self.ship1 = ShipTypes.Ship_2(self, Vec4(1.0, 1.0, 1.0, 0))
+        self.ship1 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.0, 0))
         
         self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
         
@@ -259,22 +259,6 @@ class Game():
         self.updateAllCollectibles()
         self.contactGroup.empty()
         return task.cont
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
 
 
 ## class Wall(GameObject):
