@@ -1,4 +1,5 @@
 from StaticObject import bigWall
+from StaticObject import AntiGravityPlate
 from Base import Base
 from Pylon import Pylon
 
@@ -24,6 +25,8 @@ class Map:
         self.base2 = self.makeBase( self.game, -(mapY - 10) )
 
         self.makeBoundaryWalls( self.game, mapX, mapY )
+        
+        self.makeAntiGravityPlate( self.game, mapX, mapY )
         
     def getPylonList(self):
         return self.pylonList
@@ -70,4 +73,10 @@ class Map:
         self.base = Base( game )
         self.base.setPos( Vec3( 0, posY, 0) )
         return self.base
+        
+    def makeAntiGravityPlate(self, game, mapX, mapY):
+        #spawns an AntiGravityPlate
+        self.agplate = AntiGravityPlate( game, mapX, mapY )
+        self.agplate.setPos( Vec3( 0, 0, -5) )
+        return self.agplate
 

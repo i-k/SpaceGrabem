@@ -28,25 +28,34 @@ class Base(StaticObject):
     def __init__(self, game):
         self.game = game
         
-        self.collGeom = OdeBoxGeom( self.game.physicsSpace, 2,2,2)
+        self.collGeomInner = OdeBoxGeom( self.game.physicsSpace, 24,8,2)
         #self.collGeom.setBody(self.body)
-        self.collGeom.setCategoryBits( BitMask32(1) )
-        self.collGeom.setCollideBits( BitMask32(1) )
+        self.collGeomInner.setCategoryBits( BitMask32(1) )
+        self.collGeomInner.setCollideBits( BitMask32(1) )
+        
+        self.collGeomOuter = OdeBoxGeom( self.game.physicsSpace, 28,6,2)
+        #self.collGeom.setBody(self.body)
+        self.collGeomOuter.setCategoryBits( BitMask32(1) )
+        self.collGeomOuter.setCollideBits( BitMask32(1) )
         
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
-        model = loader.loadModel('testipalikka.egg')
+        model = loader.loadModel('Base.egg')
         model.reparentTo(self.visualNode)
-    
 
     
     def checkCollision(self, ship):
-         if OdeUtil.collide(ship.collGeom, self.collGeom) and ship.hasBall():
+         if OdeUtil.collide(ship.collGeom, self.collGeomInner) and ship.hasBall():
             #if ship.hasBall():
             ship.addPoints(ship.Ball.getValue())
-            ship.dropBall()
+            ship.dropBall( z = 300 )
             print ship.SHIP_TYPE + " " +  str(ship.getPoints()) + " Points! "
             #print " Base One! "
             
     def addToBaseList(self, baseList):
         baseList.append(self)
+        
+    def setPos(self, pos):
+        self.visualNode.setPos( pos )
+        self.collGeomInner.setPosition( pos )
+        self.collGeomOuter.setPosition( pos )

@@ -9,7 +9,7 @@ class GameObject:
     def update(self, dt):
         self.visualNode.setHpr( self.getHpr() )
         pos = self.body.getPosition()
-        self.visualNode.setPos( Vec3(pos[0] , pos[1] , 0) )
+        self.visualNode.setPos( Vec3(pos[0] , pos[1] , pos[2]) )
     
     def setPos(self, pos):
         self.visualNode.setPos(pos)

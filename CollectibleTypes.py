@@ -37,7 +37,8 @@ class Pallo(Collectible):
         #self.idnumber = id
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
-        model = loader.loadModel('testipalikka.egg')
+        model = loader.loadModel('Ball.egg')
+        model.setScale(2.5)
         model.reparentTo(self.visualNode)
 
         plight = PointLight('plight')
@@ -51,10 +52,10 @@ class Pallo(Collectible):
         self.mass = OdeMass()
         self.mass.setBox(10,1,1,1)
         self.body.setMass(self.mass)
-        self.body.setGravityMode(False)
+        #self.body.setGravityMode(False)
         #self.juttu = OdeUtil()
         
-        self.collGeom = OdeSphereGeom( self.game.physicsSpace, 2)
+        self.collGeom = OdeSphereGeom( self.game.physicsSpace, 3.5)
         self.collGeom.setBody(self.body)
         self.collGeom.setCategoryBits( BitMask32(0xffffffff) )
         self.collGeom.setCollideBits( BitMask32(0xffffffff) )

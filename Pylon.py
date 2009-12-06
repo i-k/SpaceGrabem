@@ -28,7 +28,8 @@ class Pylon(StaticObject):
         
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
-        self.model = loader.loadModel('testipalikka.egg')
+        self.model = loader.loadModel('AbsorbingPylon.egg')
+        self.model.setScale(2)
         self.model.reparentTo(self.visualNode)
         
         #TODO: trigger geom
@@ -83,7 +84,7 @@ class Pylon(StaticObject):
     def checkCollision(self, ship):
          if OdeUtil.collide(ship.collGeom, self.collGeom) and ship.hasBall():
             #ship.Ball.Restore(ship)
-            ship.dropBall()
+            ship.dropBall( z = 300 )
             print str(ship.getShipType()) + " lost its balls! ONOES!!"
     
     #checks if collision happens with a ship in the list of ships

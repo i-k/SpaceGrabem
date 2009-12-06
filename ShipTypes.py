@@ -26,7 +26,7 @@ class Ship_1(Ship):
     
     
     def __init__(self, game, color):
-        self.POWER = 100
+        self.POWER = 150
         self.game = game
         self.SHIP_TYPE = "UFO"
         self.Ball_offset = 10.0
@@ -41,6 +41,7 @@ class Ship_1(Ship):
         self.mass = OdeMass()
         self.mass.setBox(10,1,1,1)
         self.body.setMass(self.mass)
+        #self.body.setGravityMode(False)
 
         #odespheregeom(... , size of hitbox sphere)
         self.collGeom = OdeSphereGeom( self.game.physicsSpace, 5)
@@ -105,10 +106,10 @@ class Ship_2(Ship):
     
     def __init__(self, game, color):
 
-        self.POWER = 100
+        self.POWER = 200
         self.game = game
         self.SHIP_TYPE = "RAKETTI"
-        self.Ball_offset = 6.0
+        self.Ball_offset = 10.0
      #   self.hasBall = False
         self.thrust = False
         self.thrustLeft = False
@@ -120,9 +121,10 @@ class Ship_2(Ship):
         self.mass = OdeMass()
         self.mass.setBox(10,1,1,1)
         self.body.setMass(self.mass)
+        #self.body.setGravityMode(False)
 
         #odespheregeom(... , size of hitbox sphere)
-        self.collGeom = OdeSphereGeom( self.game.physicsSpace, 2)
+        self.collGeom = OdeSphereGeom( self.game.physicsSpace, 3)
         self.collGeom.setBody(self.body)
         self.collGeom.setCategoryBits( BitMask32(0xffffffff) )
         self.collGeom.setCollideBits( BitMask32(0xffffffff) )
@@ -131,8 +133,9 @@ class Ship_2(Ship):
         self.visualNode.reparentTo(render)
         model = loader.loadModel('spaceship.egg')
         model.setH(180)
+        model.setY(15)
         model.reparentTo(self.visualNode)
-        self.visualNode.setScale(0.5)
+        self.visualNode.setScale(0.4)
         plight = PointLight('plight')
         plight.setPoint( Point3(0.6, 0, 5) )
         plight.setColor( color )
@@ -140,7 +143,10 @@ class Ship_2(Ship):
         plightNodePath = model.attachNewNode(plight)
         model.setLight(plightNodePath)
 
-
+#        self.collGeom = OdeTriMesh( self.game.physicsSpace, 2)
+#        self.collGeom.setBody(self.body)
+#        self.collGeom.setCategoryBits( BitMask32(0xffffffff) )
+#        self.collGeom.setCollideBits( BitMask32(0xffffffff) )
 
     
     
