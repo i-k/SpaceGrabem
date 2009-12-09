@@ -3,7 +3,8 @@
 toimiiko tama kommenttina??
 
 SpaceGrab'Em
-Versio: 0.01
+Versio: 0.5
+
 
 
 '''
@@ -50,13 +51,13 @@ class Game():
         base.disableMouse()
         base.camera.setPos(0,0,640)
         base.camera.lookAt(0,0,0)
-       
+ 
         
         self.loadPhysics()
         self.loadLights()
         
         #map x boundary, map y boundary, amount of pylons
-        self.map = Map(self, 160.0, 160.0, 7)
+        self.map = Map(self, 150.0, 150.0, 7)
         
 
         
@@ -88,8 +89,8 @@ class Game():
 
         ##katsotaan saako toimimaan listana gamelooppiin -- saa
        ##self.shipList = [self.ship1, self.ship2]
-        
-        self.ship2.setPos( Vec3(10, 10, 0) )
+        self.ship1.setPos( Vec3(0, 120, 0) )
+        self.ship2.setPos( Vec3(0, -120, 0) )
         
         
         self.setKeys()
@@ -159,6 +160,7 @@ class Game():
           0.01,
           0.01 # damping
         )
+        self.physicsWorld.setGravity(0, 0, -10)
         self.physicsSpace = OdeHashSpace()
         self.physicsSpace.setAutoCollideWorld(self.physicsWorld)
         self.contactGroup = OdeJointGroup()
@@ -217,9 +219,9 @@ class Game():
         render.setLight(lightNode1)
         
     #checks all collectibles for possible collisions with ships
-    def checkAllCollectibles(self):
+    def checkAllCollectibles(self, shipList):
         for collectible in self.collectibleList:
-            collectible.hitShips(self.shipList)
+            collectible.hitShips(shipList)
 
     #updates all collectible positions
     def updateAllCollectibles(self):
@@ -231,31 +233,31 @@ class Game():
         ## for collectible in self.collectibleList:
             ## collectible.applyForces()
     
-    def applyForceAllShips(self):
-        for ship in self.shipList:
+    def applyForceAllShips(self, shipList):
+        for ship in shipList:
             ship.applyForces()
             
     #updates all ship positions
-    def updateAllShips(self):
-        for ship in self.shipList:
+    def updateAllShips(self, shipList):
+        for ship in shipList:
             ship.update(Game.UPDATE_RATE)
             
     #checks all pylons for possible collisions with ships
-    def checkAllPylons(self):
-        for pylon in self.map.getPylonList():
-            pylon.checkCollisionList(self.shipList)
+    def checkAllPylons(self, pylonList, shipList):
+        for pylon in pylonList:
+            pylon.checkCollisionList(shipList)
         
         
     def loop(self, task):
-        self.applyForceAllShips()
+        self.applyForceAllShips(self.shipList)
         self.physicsSpace.autoCollide()
-        self.checkAllCollectibles()
+        self.checkAllCollectibles(self.shipList)
         self.map.getBase1().checkCollision(self.ship1)
         self.map.getBase2().checkCollision(self.ship2)
-        self.checkAllPylons()
+        self.checkAllPylons(self.map.getPylonList(), self.shipList)
         
         self.physicsWorld.quickStep(Game.UPDATE_RATE)
-        self.updateAllShips()
+        self.updateAllShips(self.shipList)
         self.updateAllCollectibles()
         self.contactGroup.empty()
         return task.cont
