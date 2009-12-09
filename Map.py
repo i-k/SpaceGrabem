@@ -1,11 +1,14 @@
 from StaticObject import bigWall
+from StaticObject import AntiGravityPlate
 from Base import Base
 from Pylon import Pylon
+import ShipTypes
 
 import math, random
 
 from pandac.PandaModules import (
-  Vec3
+  Vec3,
+  Vec4
 )
 
 
@@ -15,18 +18,36 @@ class Map:
     def __init__(self, game, mapX = 100.0, mapY = 100.0, pylons = 3):
         self.game = game
         self.pylonList = []
+#        self.shipList = []
         #self.baseList = []
         
+#        self.ship1 = ShipTypes.Ship_2(self.game, Vec4(1.0, 1.0, 1.0, 0))
+        
+#        self.ship2 = ShipTypes.Ship_1(self.game, Vec4(0.6, 0.0, 0.0, 0))
+                
+#        #lisataan alukset listaan
+#        self.ship1.addToShipList(self.shipList)
+#        self.ship2.addToShipList(self.shipList)
+#        self.ship1.setPos( Vec3(0, mapY - 30, 0) )
+#        self.ship2.setPos( Vec3(0, -(mapY - 30), 0) )
+
         #subtract 10 so pylons won't spawn inside walls
         self.makeRndPylons( self.game, pylons, (mapX - 10), (mapY - 10) )
+        #self.makePylon( self.game, 100, 0, 0)
+        
         #subtract 10 so bases won't spawn inside walls
         self.base1 = self.makeBase( self.game, (mapY - 10) )
         self.base2 = self.makeBase( self.game, -(mapY - 10) )
 
         self.makeBoundaryWalls( self.game, mapX, mapY )
         
+        self.makeAntiGravityPlate( self.game, (2*mapX), (2*mapY) )
+        
     def getPylonList(self):
         return self.pylonList
+
+    def getShiplist(self):
+        return self.shipList
     
     def getBase1(self):
         return self.base1
@@ -35,7 +56,7 @@ class Map:
         return self.base2
 
     def makeBoundaryWalls(self, game, MapX = 100.0, MapY = 100.0, WallLength = 50.0 ):
-        WALLS = range(1, int(2*((MapX / WallLength) + 1)))
+        WALLS = range(1, int(2*(MapX / WallLength +1)))
         for Wall in WALLS:
             BigWall1 = bigWall(game)
             BigWall1.setPos( Vec3(-MapX + (WallLength*Wall)-(WallLength / 2) , -MapY, 0) )
@@ -69,5 +90,16 @@ class Map:
         #spawns a base
         self.base = Base( game )
         self.base.setPos( Vec3( 0, posY, 0) )
+
         return self.base
+        #palauttaa basen ihan vaan siksi etta saa laitettua johonkin muuttujaan
+        #ks. konstruktorissa self.base1 ja 2
+        #  saadaan tunnistettua kumman base on kyseessa, 1-pelaajan vaiko 2
+
+        
+    def makeAntiGravityPlate(self, game, mapX, mapY):
+        #spawns an AntiGravityPlate
+        self.agplate = AntiGravityPlate( game, mapX, mapY )
+        self.agplate.setPos( Vec3( 0, 0, -5) )
+        #return self.agplate
 
