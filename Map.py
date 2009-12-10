@@ -13,9 +13,9 @@ from pandac.PandaModules import (
 
 
 class Map:
-
-
+    
     def __init__(self, game, mapX = 100.0, mapY = 100.0, pylons = 3):
+
         self.game = game
         self.pylonList = []
 #        self.shipList = []
@@ -83,10 +83,10 @@ class Map:
         
         
     def makeRndPylons(self, game, amount, mapX, mapY):
-        #create n amount of random powered pylons ( power is something between -100 and 100 )
+        #create n amount of random powered pylons ( power is something between -game.MAX_PYLON_POWER and game.MAX_PYLON_POWER )
         for x in range(amount):
 #            print str(x) + " loop"
-            self.makePylon( game, random.randrange(-100, 100), random.randrange( -mapX, mapX ), random.randrange( -mapY, mapY ) )
+            self.makePylon( game, random.randrange(-self.game.MAX_PYLON_POWER, self.game.MAX_PYLON_POWER), random.randrange( -mapX, mapX ), random.randrange( -mapY, mapY ) )
         
     def makeBase(self, game, posY, posX = 0):
         #spawns a base

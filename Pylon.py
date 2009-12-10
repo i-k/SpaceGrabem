@@ -13,9 +13,7 @@ from StaticObject import StaticObject
 
 class Pylon(StaticObject):
     
-    
-    
-    def __init__(self, game, power = 10, range = 30):
+    def __init__(self, game, power = 5, range = 30):
         self.game = game
         self.POWER = power
         self.Active = False
@@ -38,11 +36,16 @@ class Pylon(StaticObject):
         self.model.setScale(2)
         self.model.reparentTo(self.visualNode)
         
-        
-        if (self.getPower() > 0):
-            self.setColor( Vec4(1.0, 0.0, 0.0, 0.0) )
+        pow = self.getPower()*2
+        maxPow = self.game.MAX_PYLON_POWER
+        if (pow > 0):
+            self.offColor = Vec4(pow/maxPow, 0.0, 0.0, 0.0)
+            self.onColor = Vec4(0.0, pow/maxPow, 0.0, 0.0)
+            self.setColor( self.offColor )
         if (self.getPower() <= 0):
-            self.setColor( Vec4(0.0, 0.0, 1.0, 0.0) )
+            self.offColor = Vec4(0.0, 0.0, -pow/maxPow, 0.0)
+            self.onColor = Vec4(0.0, -pow/maxPow, 0.0, 0.0)
+            self.setColor( self.offColor )
             
     def setPos(self, pos):
         self.visualNode.setPos( pos )
@@ -58,6 +61,7 @@ class Pylon(StaticObject):
     def getRange(self):
         return self.RANGE
         
+        
     def setColor(self, color):
         plight = PointLight('plight')
         plight.setPoint( Point3(0.6, 0, 5) )
@@ -65,12 +69,15 @@ class Pylon(StaticObject):
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         plightNodePath = self.model.attachNewNode(plight)
         self.model.setLight(plightNodePath)
+        self.plight = plight
         
     def setActiveOn(self):
         self.Active = True
+        self.plight.setColor(self.onColor)
         
     def setActiveOff(self):
         self.Active = False
+        self.plight.setColor(self.offColor)
         
     def isActive(self):
         return self.Active

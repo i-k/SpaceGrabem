@@ -46,6 +46,7 @@ class Game():
 
     HUD_TEXT_SCALE = 0.04
     UPDATE_RATE = 1/60.0
+    MAX_PYLON_POWER = 10
 
     def __init__(self):
         base.disableMouse()

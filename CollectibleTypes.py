@@ -16,7 +16,7 @@ from pandac.PandaModules import (
   OdeBody,
   OdeSphereGeom,
   OdeBoxGeom,
-  BitMask32,
+  BitMask32
 #  TextNode
 )
 
@@ -47,7 +47,7 @@ class Pallo(Collectible):
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         plightNodePath = model.attachNewNode(plight)
         model.setLight(plightNodePath)
-        
+
         self.body = OdeBody(game.physicsWorld)
         self.mass = OdeMass()
         self.mass.setBox(10,1,1,1)
