@@ -23,7 +23,7 @@ from pandac.PandaModules import (
 from GameObject import GameObject
 
 class Ship(GameObject):
-    #POWER = 100
+    
         #lisaa aluksen listaan
     def addToShipList(self, shipList):
         shipList.append(self)
@@ -52,10 +52,11 @@ class Ship(GameObject):
       #  self.Ball.setbody
         
         #TODO: switch 30 with width of map and 40 with height of map (global variables??)
-    def dropBall(self, x = random.randrange(30) ,y = random.randrange(40)):
+    def dropBall(self, x = random.randrange(30) ,y = random.randrange(40), z = 0, linX = 0, linY = 0):
    #     self.hasBall = False
         self.Ball.Restore(self)
-        self.Ball.setPos( Vec3(x, y, 0))
+        self.Ball.setPos( Vec3(x, y, z))
+        self.Ball.setVelocity(linX, linY)
         #self.Ball.showObject()
         self.Ball = None
 
@@ -107,8 +108,7 @@ class Ship(GameObject):
 #            print str(x) + " x of ball test debug joo"
 #            print str(y) + " y something"
             
-            self.Ball.setVelocity(linearVector[0], linearVector[1])
-            self.dropBall( x, y )
+            self.dropBall( x, y, linX = linearVector[0], linY = linearVector[1] )
             
 #    def universalBrake(self, body):
 #        Velocity = self.body.getLinearVel() 
@@ -144,5 +144,5 @@ class Ship(GameObject):
     def update(self, dt):
         self.visualNode.setHpr( self.getHpr() + Vec3(self.rotation * 2.5, 0, 0) )
         pos = self.body.getPosition()
-        self.visualNode.setPos( Vec3(pos[0], pos[1], 0) )
+        self.setPos( Vec3(pos[0], pos[1], 0) )
         
