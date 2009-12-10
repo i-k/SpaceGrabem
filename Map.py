@@ -41,7 +41,9 @@ class Map:
 
         self.makeBoundaryWalls( self.game, mapX, mapY )
         
+
         self.makeAntiGravityPlate( self.game, (2*mapX), (2*mapY) )
+
         
     def getPylonList(self):
         return self.pylonList
@@ -92,14 +94,12 @@ class Map:
         self.base.setPos( Vec3( 0, posY, 0) )
 
         return self.base
+
         #palauttaa basen ihan vaan siksi etta saa laitettua johonkin muuttujaan
         #ks. konstruktorissa self.base1 ja 2
-        #  saadaan tunnistettua kumman base on kyseessa, 1-pelaajan vaiko 2
-
-        
+        #  saadaan tunnistettua kumman base on kyseessa, 1-pelaajan vaiko 2  
     def makeAntiGravityPlate(self, game, mapX, mapY):
         #spawns an AntiGravityPlate
         self.agplate = AntiGravityPlate( game, mapX, mapY )
         self.agplate.setPos( Vec3( 0, 0, -5) )
-        #return self.agplate
-
+        return self.agplate

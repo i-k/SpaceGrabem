@@ -160,7 +160,9 @@ class Game():
           0.01,
           0.01 # damping
         )
+
         self.physicsWorld.setGravity(0, 0, -10)
+
         self.physicsSpace = OdeHashSpace()
         self.physicsSpace.setAutoCollideWorld(self.physicsWorld)
         self.contactGroup = OdeJointGroup()

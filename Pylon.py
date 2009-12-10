@@ -106,6 +106,7 @@ class Pylon(StaticObject):
 #            #ship.Ball.Restore(ship)
 #            ship.dropBall( z = 300 )
 #            print str(ship.getShipType()) + " lost its balls! ONOES!!"
+
     
     #checks if collision happens with a ship in the list of ships
     #also checks if ship is inside the range of the pylon's power

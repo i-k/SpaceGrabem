@@ -52,7 +52,10 @@ class Pallo(Collectible):
         self.mass = OdeMass()
         self.mass.setBox(10,1,1,1)
         self.body.setMass(self.mass)
+
         self.body.setGravityMode(True)
+
+        #self.body.setGravityMode(False)
         #self.juttu = OdeUtil()
         
         self.collGeom = OdeSphereGeom( self.game.physicsSpace, 3.5)
@@ -91,12 +94,3 @@ class Pallo(Collectible):
         print ship.getShipType() + " regained 20 power!!"
         
   #  def releaseForces(self, ship):
-        
-       
-
-
-
-
-    
- 
-

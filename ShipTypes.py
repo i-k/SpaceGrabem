@@ -144,7 +144,6 @@ class Ship_2(Ship):
         plightNodePath = model.attachNewNode(plight)
         model.setLight(plightNodePath)
 
-
 #        self.collGeom = OdeTriMesh( self.game.physicsSpace, 2)
 #        self.collGeom.setBody(self.body)
 #        self.collGeom.setCategoryBits( BitMask32(0xffffffff) )

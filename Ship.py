@@ -144,5 +144,7 @@ class Ship(GameObject):
     def update(self, dt):
         self.visualNode.setHpr( self.getHpr() + Vec3(self.rotation * 2.5, 0, 0) )
         pos = self.body.getPosition()
+
         self.setPos( Vec3(pos[0], pos[1], 0) )
-        
+
+        self.visualNode.setPos( Vec3(pos[0], pos[1], 0) ) #TODO: fix to enable gravity, e.g. pos[2]
