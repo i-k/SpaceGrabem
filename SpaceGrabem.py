@@ -10,13 +10,13 @@ Versio: 0.5
 '''
 
 from pandac.PandaModules import (
-#  AmbientLight,
+ # AmbientLight,
   DirectionalLight,
-#  PointLight,
+  PointLight,
 #  NodePath,
   Vec3,
   Vec4,
-#  Point3,
+  Point3,
 #  Quat,
 #  OdeUtil,
   OdeWorld,
@@ -46,7 +46,7 @@ class Game():
 
     HUD_TEXT_SCALE = 0.04
     UPDATE_RATE = 1/60.0
-    MAX_PYLON_POWER = 10
+    MAX_PYLON_POWER = 100
 
     def __init__(self):
         base.disableMouse()
@@ -78,16 +78,19 @@ class Game():
 
         #alustaa tyhjan listan
         self.shipList = []
-        self.ship1 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.0, 0))
+        self.ship1 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.6, 0))
         
         self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
         
         self.LoadHUD()
         
         #lisataan alukset listaan
+#        self.shipList.append(self.ship1)
+#        self.shipList.append(self.ship2)
+
         self.ship1.addToShipList(self.shipList)
         self.ship2.addToShipList(self.shipList)
-
+        
         ##katsotaan saako toimimaan listana gamelooppiin -- saa
        ##self.shipList = [self.ship1, self.ship2]
         self.ship1.setPos( Vec3(0, 120, 0) )
@@ -215,10 +218,16 @@ class Game():
 #        )
 
     def loadLights(self):
+#        light1 = PointLight('light1')
+#        lightNode1 = render.attachNewNode(light1)
+#        light1.setColor( Vec4(0.7, 0.7, 0.7, 0) )
+#        light1.setAttenuation( Vec3(0.5, 0.01, 0.01) )
+#        light1.setPoint( Point3(0.6, 0, 5) )
         light1 = DirectionalLight('light1')
         lightNode1 = render.attachNewNode(light1)
         light1.setDirection( Vec3(-1, 0.5, -0.25) )
-        light1.setColor( Vec4(0.5, 0.9, 0.9, 0) )
+        light1.setColor( Vec4(0.7, 0.7, 0.7, 0) )
+        
         render.setLight(lightNode1)
         
     #checks all collectibles for possible collisions with ships
@@ -255,8 +264,8 @@ class Game():
         self.applyForceAllShips(self.shipList)
         self.physicsSpace.autoCollide()
         self.checkAllCollectibles(self.shipList)
-        self.map.getBase1().checkCollision(self.ship1)
-        self.map.getBase2().checkCollision(self.ship2)
+        self.map.getBase1().checkCollision(self.ship1, self.collectibleList)
+        self.map.getBase2().checkCollision(self.ship2, self.collectibleList)
         self.checkAllPylons(self.map.getPylonList(), self.shipList)
         
         self.physicsWorld.quickStep(Game.UPDATE_RATE)

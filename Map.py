@@ -58,7 +58,7 @@ class Map:
         return self.base2
 
     def makeBoundaryWalls(self, game, MapX = 100.0, MapY = 100.0, WallLength = 50.0 ):
-        WALLS = range(1, int(2*(MapX / WallLength +1)))
+        WALLS = range(1, int(2*(MapX / WallLength ))+1)
         for Wall in WALLS:
             BigWall1 = bigWall(game)
             BigWall1.setPos( Vec3(-MapX + (WallLength*Wall)-(WallLength / 2) , -MapY, 0) )
@@ -102,4 +102,4 @@ class Map:
         #spawns an AntiGravityPlate
         self.agplate = AntiGravityPlate( game, mapX, mapY )
         self.agplate.setPos( Vec3( 0, 0, -5) )
-        return self.agplate
+        #return self.agplate

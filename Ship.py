@@ -146,5 +146,3 @@ class Ship(GameObject):
         pos = self.body.getPosition()
 
         self.setPos( Vec3(pos[0], pos[1], 0) )
-
-        self.visualNode.setPos( Vec3(pos[0], pos[1], 0) ) #TODO: fix to enable gravity, e.g. pos[2]

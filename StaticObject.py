@@ -27,18 +27,13 @@ class StaticObject(GameObject):
         pos = self.collGeom.getRotation()
         self.collGeom.setRotation( pos.rotateMat(self.rotation) )
    
-
-
-
 class bigWall(StaticObject):
 
 
     
     def __init__(self, game):
         self.game = game
-        
-        
-
+    
         self.collGeom = OdeBoxGeom( self.game.physicsSpace, 50, 15, 30)
 
         #self.collGeom.setBody(self.body)
@@ -49,11 +44,7 @@ class bigWall(StaticObject):
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
         model = loader.loadModel('BigWall.egg')
-        model.reparentTo(self.visualNode) 
-        
-        
-   
-        
+        model.reparentTo(self.visualNode)
         
     def osuminen(self, ship1):
          if OdeUtil.collide(ship1.collGeom, self.collGeom):
@@ -63,9 +54,6 @@ class bigWall(StaticObject):
     
 class smallWall(StaticObject):
     
-
-        
-         
     def __init__(self, game):
         
         self.collGeom = OdeBoxGeom( self.game.physicsSpace, 10, 2, 30)
