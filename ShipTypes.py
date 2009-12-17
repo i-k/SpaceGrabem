@@ -149,8 +149,20 @@ class Ship_2(Ship):
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         plightNodePath = model.attachNewNode(plight)
         model.setLight(plightNodePath)
-
-
+        
+        aBurnerOuter = PointLight('aBurnerOuter')
+        aBurnerOuter.setPoint( Point3(10, 35, 5) )
+        aBurnerOuter.setColor( Vec4(0,0,0,0) )
+        aBurnerOuter.setAttenuation( Vec3(0.01, 0.01, 0.01) )
+        model.setLight(model.attachNewNode(aBurnerOuter))
+        
+        aBurnerInner = PointLight('aBurnerInner')
+        aBurnerInner.setPoint( Point3(0, 40, 5) )
+        aBurnerInner.setColor( Vec4(0,0,0,0) )
+        aBurnerInner.setAttenuation( Vec3(0.02, 0.02, 0.02) )
+        model.setLight(model.attachNewNode(aBurnerInner))
+        self.afterBurner = [aBurnerInner, aBurnerOuter]
+        self.afterBurnerOn = False
     
     def rotating(self):
         if self.thrustLeft:
@@ -163,6 +175,7 @@ class Ship_2(Ship):
 
     def applyForces(self):
         if self.thrust:
+            self.setAfterBurner(True)
             heading = self.getHeading()
             #addForce (x, y, z)
             self.body.addForce(
@@ -170,6 +183,8 @@ class Ship_2(Ship):
                math.cos( math.radians(heading) ) * self.POWER,
               0
             )
+        else:
+            self.setAfterBurner(False)
 # uncomment for backwards thrust (eli siis pakki)
 #        if self.thrustBack:
 #            heading = self.getHeading()
@@ -180,5 +195,17 @@ class Ship_2(Ship):
 #                  
 #               )
         self.rotating()
+        
+    def setAfterBurner(self, on):
+        if self.afterBurnerOn == on:
+            return
+        if on:
+            self.afterBurner[0].setColor( Vec4(1,1,0,0) )
+            self.afterBurner[1].setColor( Vec4(1,0,0,0) )
+        else:
+            self.afterBurner[0].setColor( Vec4(0,0,0,0) )
+            self.afterBurner[1].setColor( Vec4(0,0,0,0) )
+        self.afterBurnerOn = on
+        
 
 
