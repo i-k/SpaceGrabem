@@ -15,8 +15,8 @@ class GameObject:
         self.visualNode.setPos(pos)
         self.body.setPosition(pos)
         
-    def setVelocity(self, x, y):
-        self.body.setLinearVel(x, y, 0.0)
+    def setVelocity(self, x, y, z = 0.0):
+        self.body.setLinearVel(x, y, z)
         
     def hideObject(self):
         self.visualNode.hide()

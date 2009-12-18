@@ -20,7 +20,7 @@ class Map:
         self.pylonList = []
 #        self.shipList = []
         #self.baseList = []
-        
+#        base.camera.setPos(0,0,(mapX*3))
 #        self.ship1 = ShipTypes.Ship_2(self.game, Vec4(1.0, 1.0, 1.0, 0))
         
 #        self.ship2 = ShipTypes.Ship_1(self.game, Vec4(0.6, 0.0, 0.0, 0))
@@ -86,12 +86,15 @@ class Map:
         #create n amount of random powered pylons ( power is something between -game.MAX_PYLON_POWER and game.MAX_PYLON_POWER )
         for x in range(amount):
 #            print str(x) + " loop"
-            self.makePylon( game, random.randrange(-self.game.MAX_PYLON_POWER, self.game.MAX_PYLON_POWER), random.randrange( -mapX, mapX ), random.randrange( -mapY, mapY ) )
+            self.makePylon( game,
+             random.randrange(-self.game.MAX_PYLON_POWER, self.game.MAX_PYLON_POWER),
+             random.randrange( -mapX, mapX ), random.randrange( -mapY, mapY )
+             )
         
     def makeBase(self, game, posY, posX = 0):
         #spawns a base
         self.base = Base( game )
-        self.base.setPos( Vec3( 0, posY, 0) )
+        self.base.setPos( Vec3( posX, posY, 15), Vec3( posX, posY, 0) )
 
         return self.base
 

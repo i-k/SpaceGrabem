@@ -33,7 +33,7 @@ class Pylon(StaticObject):
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
         self.model = loader.loadModel('AbsorbingPylon.egg')
-        self.model.setScale(2)
+        self.model.setScale(1.5)
         self.model.reparentTo(self.visualNode)
         
         pow = self.getPower()*5
@@ -42,7 +42,7 @@ class Pylon(StaticObject):
             self.offColor = Vec4(pow/maxPow, 0.0, 0.0, 0.0)
             self.onColor = Vec4(0.0, pow/maxPow, 0.0, 0.0)
 
-        if (pow < 0):
+        if (pow <= 0):
             self.offColor = Vec4(0.0, 0.0, -pow/maxPow, 0.0)
             self.onColor = Vec4(0.0, -pow/maxPow, 0.0, 0.0)
             
@@ -147,5 +147,8 @@ class Pylon(StaticObject):
             #self.usingTheForce( ship )
             if OdeUtil.collide(ship.collGeom, self.collGeom) and ship.hasBall():
                 #ship.Ball.Restore(ship)
-                ship.dropBall()
+                if (self.game.collision2Sfx.status() == 1):
+                    self.game.collision2Sfx.play()
+                pos = ship.getPos()
+                ship.dropBall(x = pos[0], y = pos[1], z = 30, linX = ( (0-pos[0])/7 ), linY = ( (0-pos[1])/7 ), linZ = 2)
                 print str(ship.getShipType()) + " lost its balls! NOOOO!"

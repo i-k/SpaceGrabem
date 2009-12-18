@@ -81,7 +81,6 @@ class Collectible(GameObject):
                 
     def PowerUpEffect(self, ship):
         pass
-    #print "ZE GOGGLES!! ZEY DO NOZING!!!"
         
         
  

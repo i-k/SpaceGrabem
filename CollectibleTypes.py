@@ -37,7 +37,7 @@ class Pallo(Collectible):
         #self.idnumber = id
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
-        model = loader.loadModel('Ball.egg')
+        model = loader.loadModel('Ball2.egg')
         model.setScale(2.5)
         model.reparentTo(self.visualNode)
 
@@ -69,10 +69,8 @@ class Pallo(Collectible):
     def hitShips(self, shipList):
         
         for ship in shipList:
-         #get boundaries from somewhere and put the randrange to those
             if OdeUtil.areConnected(ship.body, self.body) and not ship.hasBall():
-            
-                
+                            
                 self.PowerUpEffect(ship)
 
     def PowerUpEffect(self, ship):

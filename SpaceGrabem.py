@@ -3,9 +3,10 @@
 toimiiko tama kommenttina??
 
 SpaceGrab'Em
-Versio: 0.5
+Versio: 0.6
 
-
+Yleinen TODO: Raketin hitboxit kunnolla, aaniefektit, taustakuva
+Modelit ja niiden teksturointi
 
 '''
 
@@ -31,6 +32,7 @@ from pandac.PandaModules import (
 )
 
 from direct.gui.OnscreenText import OnscreenText
+from direct.gui.OnscreenImage import OnscreenImage
 import direct.directbase.DirectStart
 
 
@@ -121,7 +123,16 @@ class Game():
         
 #        self.makeBoundaryWalls( 50.0, 50.0, 50.0)
         
+        b=OnscreenImage(parent=render2d, image="Geminid.jpg")
+        base.cam.node().getDisplayRegion(0).setSort(20)
+        
         base.setBackgroundColor(0,0,0.0,0)
+        
+        self.collisionSfx = loader.loadSfx("shipcollision.wav")
+        self.goalSfx = loader.loadSfx("goal.wav")
+        self.victorySfx = loader.loadSfx("victory.mp3")
+        self.collision2Sfx = loader.loadSfx("pyloncollision.wav")
+        
         
         taskMgr.add(self.loop, 'game loop')
         
@@ -165,7 +176,7 @@ class Game():
           0.01 # damping
         )
 
-        self.physicsWorld.setGravity(0, 0, -10)
+        self.physicsWorld.setGravity(0, 0, -20)
 
         self.physicsSpace = OdeHashSpace()
         self.physicsSpace.setAutoCollideWorld(self.physicsWorld)
@@ -173,22 +184,22 @@ class Game():
         self.physicsSpace.setAutoCollideJointGroup(self.contactGroup)
 
     def LoadHUD(self):
-#        self.player1HUD = OnscreenText(
-#            text = "Player 1: " + str( self.ship1.getPoints() ),
-#            fg = (1,1,1,1),
-#            #pos = ( x, y )
-#            pos = (0.5,0.6),
-#            align = TextNode.ALeft,
-#            scale = Game.HUD_TEXT_SCALE
-#        )
+        self.player1HUD = OnscreenText(
+            text = "Player 1: " + str( self.ship1.getPoints() ),
+            fg = (1,1,1,1),
+            #pos = ( x, y )
+            pos = (0.7,0.9),
+            align = TextNode.ALeft,
+            scale = Game.HUD_TEXT_SCALE
+        )
         
-#        self.player2HUD = OnscreenText(
-#            text = "Player 2: " + str( self.ship2.getPoints() ),
-#            fg = (1,1,1,1),
-#            pos = (-0.5,0.6),
-#            align = TextNode.ALeft,
-#            scale = Game.HUD_TEXT_SCALE
-#        )
+        self.player2HUD = OnscreenText(
+            text = "Player 2: " + str( self.ship2.getPoints() ),
+            fg = (1,1,1,1),
+            pos = (-0.7,0.9),
+            align = TextNode.ALeft,
+            scale = Game.HUD_TEXT_SCALE
+        )
         
         
         self.winnerText = OnscreenText(
@@ -200,22 +211,19 @@ class Game():
         )
         self.winnerText.hide()
 
-#    def updateHUD(self):
-#        self.player1HUD = OnscreenText(
-#            text = "Player 1: " + str( self.ship1.getPoints() ),
-#            fg = (1,1,1,1),
-#            pos = (0.5,0.6),
-#            align = TextNode.ALeft,
-#            scale = Game.HUD_TEXT_SCALE
-#        )
-        
-#        self.player2HUD = OnscreenText(
-#            text = "Player 2: " + str( self.ship2.getPoints() ),
-#            fg = (1,1,1,1),
-#            pos = (-0.5,0.6),
-#            align = TextNode.ALeft,
-#            scale = Game.HUD_TEXT_SCALE
-#        )
+    def updateHUD(self):
+        self.player1HUD.setText( "Player 1: " + str( self.ship1.getPoints() ) )
+        self.player2HUD.setText( "Player 2: " + str( self.ship2.getPoints() ) )
+        if (self.ship1.getPoints() > 1):
+            self.winnerText.show()
+            self.winnerText.setText( "Player 1 won " + str(self.ship1.getPoints()) + "-" + str(self.ship2.getPoints()))
+            self.victorySfx.play()
+#            self.Pause()
+        if (self.ship2.getPoints() > 9):
+            self.winnerText.show()
+            self.winnerText.setText( "Player 2 won " + str(self.ship2.getPoints()) + "-" + str(self.ship1.getPoints()))
+            self.victorySfx.play()
+
 
     def loadLights(self):
 #        light1 = PointLight('light1')
@@ -253,6 +261,7 @@ class Game():
     def updateAllShips(self, shipList):
         for ship in shipList:
             ship.update(Game.UPDATE_RATE)
+        shipList[0].shipsCollide(shipList[1])
             
     #checks all pylons for possible collisions with ships
     def checkAllPylons(self, pylonList, shipList):
@@ -266,8 +275,11 @@ class Game():
         self.checkAllCollectibles(self.shipList)
         self.map.getBase1().checkCollision(self.ship1, self.collectibleList)
         self.map.getBase2().checkCollision(self.ship2, self.collectibleList)
-        self.checkAllPylons(self.map.getPylonList(), self.shipList)
         
+#        self.game.pointsPlayerOne.setText( "Points: " + str(self.ships[0].health) )
+#        self.game.pointsPlayerTwo.setText( "Points: " + str(self.ships[1].health) )
+        
+        self.checkAllPylons(self.map.getPylonList(), self.shipList)
         self.physicsWorld.quickStep(Game.UPDATE_RATE)
         self.updateAllShips(self.shipList)
         self.updateAllCollectibles()

@@ -8,7 +8,7 @@ from pandac.PandaModules import (
 #  Vec4,
 #  Point3,
 #  Quat,
-#  OdeUtil,
+  OdeUtil,
 #  OdeWorld,
 #  OdeHashSpace,
 #  OdeJointGroup,
@@ -52,11 +52,11 @@ class Ship(GameObject):
       #  self.Ball.setbody
         
         #TODO: switch 30 with width of map and 40 with height of map (global variables??)
-    def dropBall(self, x = random.randrange(30) ,y = random.randrange(40), z = 0, linX = 0, linY = 0):
+    def dropBall(self, x = random.randrange(30) ,y = random.randrange(40), z = 0, linX = 0, linY = 0, linZ = 0):
    #     self.hasBall = False
         self.Ball.Restore(self)
         self.Ball.setPos( Vec3(x, y, z))
-        self.Ball.setVelocity(linX, linY)
+        self.Ball.setVelocity(linX, linY, linZ) #17.12.2009 linZ
         #self.Ball.showObject()
         self.Ball = None
 
@@ -146,3 +146,8 @@ class Ship(GameObject):
         pos = self.body.getPosition()
 
         self.setPos( Vec3(pos[0], pos[1], 0) )
+
+    def shipsCollide(self, ship1):
+        if OdeUtil.areConnected(self.body, ship1.body) and (self.game.collisionSfx.status() == 1):
+#            print "tormays"
+            self.game.collisionSfx.play()

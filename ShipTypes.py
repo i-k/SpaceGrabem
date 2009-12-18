@@ -14,6 +14,7 @@ from pandac.PandaModules import (
   OdeMass,
   OdeBody,
   OdeSphereGeom,
+  OdeCylinderGeom,
   OdeTriMeshGeom,
   OdeTriMeshData,
 #  OdeBoxGeom,
@@ -69,7 +70,7 @@ class Ship_1(Ship):
      #   base.accept('arrow_down', self.thrustBackOn)
       #  base.accept('arrow_down-up', self.thrustBackOff) 
       
-
+    #Hiukan turhan monimutkainen perhaps? Antaa olla, ei jaksa
     def applyForces(self):
         if self.thrust:
             heading = self.getHeading()
@@ -103,7 +104,7 @@ class Ship_1(Ship):
 
 class Ship_2(Ship):
     
-    ROTATING_SPEED = 1
+    ROTATING_SPEED = 2
     MAX_ROTATE_SPEED = 3.0
    
     
@@ -126,21 +127,35 @@ class Ship_2(Ship):
         self.body.setMass(self.mass)
         #self.body.setGravityMode(False)
 
-        #odespheregeom(... , size of hitbox sphere)
-        self.collGeom = OdeSphereGeom( self.game.physicsSpace, 3)
+     
+        self.collGeom = OdeCylinderGeom( self.game.physicsSpace, 3, 10)
         self.collGeom.setBody(self.body)
         self.collGeom.setCategoryBits( BitMask32(0xffffffff) )
         self.collGeom.setCollideBits( BitMask32(0xffffffff) )
     
-#        self.collGeom2 = 
-
+        self.collGeom2 = OdeSphereGeom( self.game.physicsSpace, 4)
+        self.collGeom2.setBody(self.body)
+        self.collGeom2.setCategoryBits( BitMask32(0xffffffff) )
+        self.collGeom2.setCollideBits( BitMask32(0xffffffff) )
+        
+        pos1 = self.body.getPosition()
+#        pos = [ (pos1[0] - 10), (pos1[1] + 30), pos1[2] ]
+        self.collGeom2.setPosition( (pos1[0] - 10), (pos1[1] + 30), pos1[2] )
+        
+        self.collGeom3 = OdeSphereGeom( self.game.physicsSpace, 4)
+        self.collGeom3.setBody(self.body)
+        self.collGeom3.setCategoryBits( BitMask32(0xffffffff) )
+        self.collGeom3.setCollideBits( BitMask32(0xffffffff) )
+        
+       
+        self.collGeom3.setPosition( (pos1[0] + 10), (pos1[1] + 30), pos1[2] )
 
         
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
         model = loader.loadModel('spaceship.egg')
-        model.setH(180)
-        model.setY(15)
+#        model.setH(180)
+#        model.setY(15)
         model.reparentTo(self.visualNode)
         self.visualNode.setScale(0.4)
         plight = PointLight('plight2')
@@ -149,15 +164,15 @@ class Ship_2(Ship):
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         plightNodePath = model.attachNewNode(plight)
         model.setLight(plightNodePath)
-        
+
         aBurnerOuter = PointLight('aBurnerOuter')
-        aBurnerOuter.setPoint( Point3(10, 35, 5) )
+        aBurnerOuter.setPoint( Point3(10, -35, 5) )
         aBurnerOuter.setColor( Vec4(0,0,0,0) )
         aBurnerOuter.setAttenuation( Vec3(0.01, 0.01, 0.01) )
         model.setLight(model.attachNewNode(aBurnerOuter))
         
         aBurnerInner = PointLight('aBurnerInner')
-        aBurnerInner.setPoint( Point3(0, 40, 5) )
+        aBurnerInner.setPoint( Point3(0, -40, 5) )
         aBurnerInner.setColor( Vec4(0,0,0,0) )
         aBurnerInner.setAttenuation( Vec3(0.02, 0.02, 0.02) )
         model.setLight(model.attachNewNode(aBurnerInner))
@@ -195,7 +210,8 @@ class Ship_2(Ship):
 #                  
 #               )
         self.rotating()
-        
+
+
     def setAfterBurner(self, on):
         if self.afterBurnerOn == on:
             return
@@ -206,6 +222,3 @@ class Ship_2(Ship):
             self.afterBurner[0].setColor( Vec4(0,0,0,0) )
             self.afterBurner[1].setColor( Vec4(0,0,0,0) )
         self.afterBurnerOn = on
-        
-
-

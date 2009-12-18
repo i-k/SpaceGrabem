@@ -82,3 +82,7 @@ class AntiGravityPlate(StaticObject):
         model = loader.loadModel('agplate.egg')
         model.setScale(20)
         model.reparentTo(self.visualNode)
+
+        tex = loader.loadTexture('test.png')
+        model.setTexture(tex, 1)
+
