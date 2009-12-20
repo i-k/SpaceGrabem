@@ -42,7 +42,7 @@ from Map import Map
 import ShipTypes
 import CollectibleTypes
 #import StaticObject
-
+import math
 
 class Game():
 
@@ -54,50 +54,23 @@ class Game():
         base.disableMouse()
         base.camera.setPos(0,0,640)
         base.camera.lookAt(0,0,0)
- 
         
         self.loadPhysics()
         self.loadLights()
         
         #map x boundary, map y boundary, amount of pylons
         self.map = Map(self, 150.0, 150.0, 7)
-        
-
-        
-        
-#        self.Base1 = Base(self)
-#        self.Base1.setPos( Vec3( 0, 50, 0))
-#        self.Base2 = Base(self)
-#        self.Base2.setPos( Vec3( 0, -50, 0))
-        #self.Base2 = Base(self)
-#        self.wall1 = StaticObject.bigWall(self)
-#        self.wall1.setPos( Vec3( 50, (-50), 0) )
-#        self.wall1.setRotation( 90 )
-#        
-#        self.wall2 = StaticObject.bigWall(self)
-#        self.wall2.setPos( Vec3( 50, 0, 0) )
-#        self.wall2.setRotation( 90 )
 
         #alustaa tyhjan listan
         self.shipList = []
-        self.ship1 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.6, 0))
-        
-        self.ship2 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0))
+        self.ship1 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0.0))
+        self.ship2 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.6, 0.0))
+        self.ship1.setPos( Vec3(0, 120, 0) )
+        self.ship2.setPos( Vec3(0, -120, 0) )    
+        self.shipList.append(self.ship1)
+        self.shipList.append(self.ship2)
         
         self.LoadHUD()
-        
-        #lisataan alukset listaan
-#        self.shipList.append(self.ship1)
-#        self.shipList.append(self.ship2)
-
-        self.ship1.addToShipList(self.shipList)
-        self.ship2.addToShipList(self.shipList)
-        
-        ##katsotaan saako toimimaan listana gamelooppiin -- saa
-       ##self.shipList = [self.ship1, self.ship2]
-        self.ship1.setPos( Vec3(0, 120, 0) )
-        self.ship2.setPos( Vec3(0, -120, 0) )
-        
         
         self.setKeys()
         
@@ -108,20 +81,7 @@ class Game():
         
         self.pallo2 = CollectibleTypes.Pallo(self, Vec4(0.0, 0.3, 0.0, 0))
         self.pallo2.setPos( Vec3(30, 20, 0) )
-        self.pallo2.addToCollectibleList(self.collectibleList)
-        
-        #self.collectibleList = [self.pallo, self.pallo2]
- 
-#        self.pylonList = []
-#        self.pylon1 = Pylon(self, 100)
-#        self.pylon1.setPos( Vec3(-30, 20, 0) )
-#        self.pylon1.addToPylonList(self.pylonList)
-
-#        self.pylon2 = Pylon(self, -100)
-#        self.pylon2.setPos( Vec3(-30, -20, 0) )
-#        self.pylon2.addToPylonList(self.pylonList)
-        
-#        self.makeBoundaryWalls( 50.0, 50.0, 50.0)
+        #self.pallo2.addToCollectibleList(self.collectibleList)
         
         b=OnscreenImage(parent=render2d, image="Geminid.jpg")
         base.cam.node().getDisplayRegion(0).setSort(20)
@@ -135,6 +95,7 @@ class Game():
         
         
         taskMgr.add(self.loop, 'game loop')
+        taskMgr.add( self.chaseBallsAround, name='Simple AI', sort=None, extraArgs=(self.ship1, self.ship2, self.collectibleList, self.map.getBase1()), priority=None, uponDeath=None, appendTask=True, taskChain=None, owner=None)
         
         run()
         
@@ -226,11 +187,6 @@ class Game():
 
 
     def loadLights(self):
-#        light1 = PointLight('light1')
-#        lightNode1 = render.attachNewNode(light1)
-#        light1.setColor( Vec4(0.7, 0.7, 0.7, 0) )
-#        light1.setAttenuation( Vec3(0.5, 0.01, 0.01) )
-#        light1.setPoint( Point3(0.6, 0, 5) )
         light1 = DirectionalLight('light1')
         lightNode1 = render.attachNewNode(light1)
         light1.setDirection( Vec3(-1, 0.5, -0.25) )
@@ -247,11 +203,6 @@ class Game():
     def updateAllCollectibles(self):
         for collectible in self.collectibleList:
             collectible.update(Game.UPDATE_RATE)
-    
-    #apply forces to all collectibles    
-    ## def applyForceAllCollectibles(self):
-        ## for collectible in self.collectibleList:
-            ## collectible.applyForces()
     
     def applyForceAllShips(self, shipList):
         for ship in shipList:
@@ -275,50 +226,48 @@ class Game():
         self.checkAllCollectibles(self.shipList)
         self.map.getBase1().checkCollision(self.ship1, self.collectibleList)
         self.map.getBase2().checkCollision(self.ship2, self.collectibleList)
-        
-#        self.game.pointsPlayerOne.setText( "Points: " + str(self.ships[0].health) )
-#        self.game.pointsPlayerTwo.setText( "Points: " + str(self.ships[1].health) )
-        
         self.checkAllPylons(self.map.getPylonList(), self.shipList)
         self.physicsWorld.quickStep(Game.UPDATE_RATE)
         self.updateAllShips(self.shipList)
         self.updateAllCollectibles()
         self.contactGroup.empty()
         return task.cont
-
-
-## class Wall(GameObject):
-
-    ## def __init__(self, game):
-        ## self.game = game
         
-        
-        ## #self.visualNode = NodePath('Visual node')
-        ## #self.visualNode.reparentTo(render)
-        ## #model = loader.loadModel('testipalikka.egg')
-        ## #model.reparentTo(self.visualNode)        
-
-        ## self.body = OdeBody(game.physicsWorld)
-        ## self.mass = OdeMass()
-        ## self.mass.setBox(100,10,10,10)
-        ## self.body.setMass(self.mass)
-        ## self.body.setGravityMode(False)
-        
-        
-        ## self.collGeom = OdeBoxGeom( self.game.physicsSpace, 100, 3, 10)
-        ## self.collGeom.setBody(self.body)
-        ## self.collGeom.setCategoryBits( BitMask32(0xffffffff) )
-        ## self.collGeom.setCollideBits( BitMask32(0xffffffff) )
-        
-      ## #testiluokka, kertoo jos ship1 osuu seinaan  
-    ## def osuminen(self, ship1):
-         ## if OdeUtil.areConnected(ship1.body, self.body):
- 
-            ## print "sdfgfdhgdfhxfhdhghcfh"
-            ## print "ship1 xdfhgxdgxdgfbcdll!!"
-        
-        
-
-
-
+    def chaseBallsAround(self, chaser, enemy, chaseList, base, task):
+        pos = chaser.getPos()
+        nearestNormedPos = 1e10000 
+        nearestRelPos = [0,0]
+        if chaser.hasBall():
+            basePos = base.getPos()
+            nearestRelPos = [ pos[0] - basePos[0], pos[1] - basePos[1] ]
+        elif enemy.hasBall():
+            enemyPos = enemy.getPos()
+            nearestRelPos = [ pos[0] - enemyPos[0], pos[1] - enemyPos[1] ]
+        else:
+            for collectible in chaseList:
+                cPos = collectible.getPos()
+                relPos = [ pos[0] - cPos[0], pos[1] - cPos[1] ]
+                if (math.fabs(relPos[0]) + math.fabs(relPos[1])) < nearestNormedPos:
+                    nearestNormedPos = math.fabs(relPos[0]) + math.fabs(relPos[1])
+                    nearestRelPos = relPos
+        if nearestRelPos[0] > 0:
+            chaser.thrustRightOff()
+            chaser.thrustLeftOn()
+        elif nearestRelPos[0] < 0:
+            chaser.thrustLeftOff()
+            chaser.thrustRightOn()
+        else:
+            chaser.thrustLeftOff()
+            chaser.thrustRightOff()
+        if nearestRelPos[1] < 0:
+            chaser.thrustBackOff()
+            chaser.thrustOn()
+        elif nearestRelPos[1] > 0:
+            chaser.thrustOff()
+            chaser.thrustBackOn()
+        else:
+            chaser.thrustOff()
+            chaser.thrustBackOff()
+        return task.cont
+    
 game = Game()
