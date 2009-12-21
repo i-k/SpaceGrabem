@@ -30,15 +30,7 @@ class GameObject:
         return self.visualNode.getHpr()
     
     def getHeading(self):
-        return self.getHpr().getX()
+        return self.visualNode.getH()
     
     def getPos(self):
         return self.body.getPosition()
-        
-    #    def SetBoundary(self, x_, y_):
-    #        self.X = x_
-    #        self.Y = y_
-        
-    #    def OutOfBounds(self):
-    #        if self.self.X:
-            

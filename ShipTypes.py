@@ -26,11 +26,8 @@ from Ship import Ship
 
 class Ship_1(Ship):
     
-
-    
-    
     def __init__(self, game, color):
-        self.POWER = 1500
+        self.POWER = 1000
         self.game = game
         self.SHIP_TYPE = "UFO"
         self.Ball_offset = 10.0
@@ -63,7 +60,7 @@ class Ship_1(Ship):
         plight.setColor( color )
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         plightNodePath = model.attachNewNode(plight)
-        model.setLight(plightNodePath)
+        render.setLight(plightNodePath)
         
  # setMoreKeys in ship class = BAD IDEA
     #def setMoreKeys(self):
@@ -110,7 +107,7 @@ class Ship_2(Ship):
     
     def __init__(self, game, color):
 
-        self.POWER = 2000
+        self.POWER = 1000
         self.game = game
         self.SHIP_TYPE = "RAKETTI"
         self.Ball_offset = 10.0
@@ -125,8 +122,6 @@ class Ship_2(Ship):
         self.mass = OdeMass()
         self.mass.setBox(10,1,1,1)
         self.body.setMass(self.mass)
-        #self.body.setGravityMode(False)
-
      
         self.collGeom = OdeCylinderGeom( self.game.physicsSpace, 3, 10)
         self.collGeom.setBody(self.body)
@@ -163,19 +158,19 @@ class Ship_2(Ship):
         plight.setColor( color )
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         plightNodePath = model.attachNewNode(plight)
-        model.setLight(plightNodePath)
+        render.setLight(plightNodePath)
 
         aBurnerOuter = PointLight('aBurnerOuter')
-        aBurnerOuter.setPoint( Point3(10, -35, 5) )
-        aBurnerOuter.setColor( Vec4(0,0,0,0) )
+        aBurnerOuter.setPoint( Point3(0, -20, 0) )
+        aBurnerOuter.setColor( Vec4(1,0,0,0) )
         aBurnerOuter.setAttenuation( Vec3(0.01, 0.01, 0.01) )
-        model.setLight(model.attachNewNode(aBurnerOuter))
+        render.setLight(model.attachNewNode(aBurnerOuter))
         
         aBurnerInner = PointLight('aBurnerInner')
-        aBurnerInner.setPoint( Point3(0, -40, 5) )
-        aBurnerInner.setColor( Vec4(0,0,0,0) )
+        aBurnerInner.setPoint( Point3(0, -25, 0) )
+        aBurnerInner.setColor( Vec4(1,1,0,0) )
         aBurnerInner.setAttenuation( Vec3(0.02, 0.02, 0.02) )
-        model.setLight(model.attachNewNode(aBurnerInner))
+        render.setLight(model.attachNewNode(aBurnerInner))
         self.afterBurner = [aBurnerInner, aBurnerOuter]
         self.afterBurnerOn = False
     
@@ -216,9 +211,9 @@ class Ship_2(Ship):
         if self.afterBurnerOn == on:
             return
         if on:
-            self.afterBurner[0].setColor( Vec4(1,1,0,0) )
-            self.afterBurner[1].setColor( Vec4(1,0,0,0) )
+            self.afterBurner[0].setAttenuation( Vec3(0.02, 0.02, 0.02) )
+            self.afterBurner[1].setAttenuation( Vec3(0.01, 0.01, 0.01) )
         else:
-            self.afterBurner[0].setColor( Vec4(0,0,0,0) )
-            self.afterBurner[1].setColor( Vec4(0,0,0,0) )
+            self.afterBurner[0].setAttenuation( Vec3(1, 1, 1) )
+            self.afterBurner[1].setAttenuation( Vec3(1, 1, 1) )
         self.afterBurnerOn = on

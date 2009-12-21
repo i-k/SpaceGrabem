@@ -5,7 +5,8 @@ Vec3,
 OdeBoxGeom,
 NodePath,
 BitMask32,
-OdeUtil
+OdeUtil,
+Texture
 )
 
 class StaticObject(GameObject):
@@ -29,12 +30,10 @@ class StaticObject(GameObject):
    
 class bigWall(StaticObject):
 
-
-    
     def __init__(self, game):
         self.game = game
     
-        self.collGeom = OdeBoxGeom( self.game.physicsSpace, 50, 15, 30)
+        self.collGeom = OdeBoxGeom( self.game.physicsSpace, 50, 6, 30)
 
         #self.collGeom.setBody(self.body)
         self.collGeom.setCategoryBits( BitMask32(0x000000ff) )#ffffffff) )
@@ -43,6 +42,7 @@ class bigWall(StaticObject):
         #remember to make wall model with "50" length... no idea 50 what, though
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
+        
         model = loader.loadModel('BigWall.egg')
         model.reparentTo(self.visualNode)
         
@@ -78,11 +78,11 @@ class AntiGravityPlate(StaticObject):
         self.collGeom.setCollideBits( BitMask32(0x000000ff) )
         
         self.visualNode = NodePath('Visual node')
-        self.visualNode.reparentTo(render)
         model = loader.loadModel('agplate.egg')
         model.setScale(20)
         model.reparentTo(self.visualNode)
-
         tex = loader.loadTexture('test.png')
-        model.setTexture(tex, 1)
+
+        self.visualNode.setTexture(tex, 1)
+        self.visualNode.reparentTo(render)
 

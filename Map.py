@@ -18,18 +18,6 @@ class Map:
 
         self.game = game
         self.pylonList = []
-#        self.shipList = []
-        #self.baseList = []
-#        base.camera.setPos(0,0,(mapX*3))
-#        self.ship1 = ShipTypes.Ship_2(self.game, Vec4(1.0, 1.0, 1.0, 0))
-        
-#        self.ship2 = ShipTypes.Ship_1(self.game, Vec4(0.6, 0.0, 0.0, 0))
-                
-#        #lisataan alukset listaan
-#        self.ship1.addToShipList(self.shipList)
-#        self.ship2.addToShipList(self.shipList)
-#        self.ship1.setPos( Vec3(0, mapY - 30, 0) )
-#        self.ship2.setPos( Vec3(0, -(mapY - 30), 0) )
 
         #subtract 10 so pylons won't spawn inside walls
         self.makeRndPylons( self.game, pylons, (mapX - 10), (mapY - 10) )
@@ -70,9 +58,6 @@ class Map:
             BigWall4 = bigWall(game)
             BigWall4.setRotation( 90 )
             BigWall4.setPos( Vec3(+MapX , -MapY + (WallLength*Wall)-(WallLength / 2), 0) )
-            #self.wallList.append(BigWall1)
-            #self.wallList.append(BigWall2)
-            #self.wallList.append(BigWall3)
             
             
     def makePylon(self, game, power, x, y):

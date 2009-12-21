@@ -75,7 +75,6 @@ class Pylon(StaticObject):
         self.plight = plight
         plightNodePath = self.model.attachNewNode(self.plight)
         self.model.setLight(plightNodePath)
-        #self.plight = plight
         
     def setActiveOn(self):
         self.Active = True

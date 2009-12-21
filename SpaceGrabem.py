@@ -34,6 +34,7 @@ from pandac.PandaModules import (
 from direct.gui.OnscreenText import OnscreenText
 from direct.gui.OnscreenImage import OnscreenImage
 import direct.directbase.DirectStart
+from direct.filter.CommonFilters import CommonFilters
 
 
 #from Base import Base
@@ -48,7 +49,7 @@ class Game():
 
     HUD_TEXT_SCALE = 0.04
     UPDATE_RATE = 1/60.0
-    MAX_PYLON_POWER = 100
+    MAX_PYLON_POWER = 50
 
     def __init__(self):
         base.disableMouse()
@@ -79,8 +80,8 @@ class Game():
         self.pallo.setPos( Vec3(0, 20, 0) )
         self.pallo.addToCollectibleList(self.collectibleList)
         
-        self.pallo2 = CollectibleTypes.Pallo(self, Vec4(0.0, 0.3, 0.0, 0))
-        self.pallo2.setPos( Vec3(30, 20, 0) )
+        #self.pallo2 = CollectibleTypes.Pallo(self, Vec4(0.0, 0.3, 0.0, 0))
+        #self.pallo2.setPos( Vec3(30, 20, 0) )
         #self.pallo2.addToCollectibleList(self.collectibleList)
         
         b=OnscreenImage(parent=render2d, image="Geminid.jpg")
@@ -93,6 +94,8 @@ class Game():
         self.victorySfx = loader.loadSfx("victory.mp3")
         self.collision2Sfx = loader.loadSfx("pyloncollision.wav")
         
+        filters = CommonFilters(base.win, base.cam)
+        render.setShaderAuto()
         
         taskMgr.add(self.loop, 'game loop')
         taskMgr.add( self.chaseBallsAround, name='Simple AI', sort=None, extraArgs=(self.ship1, self.ship2, self.collectibleList, self.map.getBase1()), priority=None, uponDeath=None, appendTask=True, taskChain=None, owner=None)
@@ -162,7 +165,6 @@ class Game():
             scale = Game.HUD_TEXT_SCALE
         )
         
-        
         self.winnerText = OnscreenText(
             text = "Tekstia, tekstia, tekstia",
             fg = (1,1,1,1),
@@ -170,12 +172,13 @@ class Game():
             align = TextNode.ALeft,
             scale = Game.HUD_TEXT_SCALE
         )
+        self.winnerText.setZ(600)
         self.winnerText.hide()
 
     def updateHUD(self):
         self.player1HUD.setText( "Player 1: " + str( self.ship1.getPoints() ) )
         self.player2HUD.setText( "Player 2: " + str( self.ship2.getPoints() ) )
-        if (self.ship1.getPoints() > 1):
+        if (self.ship1.getPoints() > 9):
             self.winnerText.show()
             self.winnerText.setText( "Player 1 won " + str(self.ship1.getPoints()) + "-" + str(self.ship2.getPoints()))
             self.victorySfx.play()
@@ -189,9 +192,9 @@ class Game():
     def loadLights(self):
         light1 = DirectionalLight('light1')
         lightNode1 = render.attachNewNode(light1)
+        lightNode1.lookAt(0,0,0)
         light1.setDirection( Vec3(-1, 0.5, -0.25) )
         light1.setColor( Vec4(0.7, 0.7, 0.7, 0) )
-        
         render.setLight(lightNode1)
         
     #checks all collectibles for possible collisions with ships
@@ -256,9 +259,6 @@ class Game():
         elif nearestRelPos[0] < 0:
             chaser.thrustLeftOff()
             chaser.thrustRightOn()
-        else:
-            chaser.thrustLeftOff()
-            chaser.thrustRightOff()
         if nearestRelPos[1] < 0:
             chaser.thrustBackOff()
             chaser.thrustOn()

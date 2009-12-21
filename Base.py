@@ -2,11 +2,11 @@ import random
 from pandac.PandaModules import (
 #  AmbientLight,
 #  DirectionalLight,
-#  PointLight,
+  PointLight,
   NodePath,
   Vec3,
-# Vec4,
-#  Point3,
+  Vec4,
+  Point3,
 #  Quat,
   OdeUtil,
 # OdeWorld,
@@ -46,9 +46,13 @@ class Base(StaticObject):
         self.visualNode.reparentTo(render)
         model = loader.loadModel('Base.egg')
         model.reparentTo(self.visualNode)
-
-    
-
+        
+      #  plight = PointLight('baselight')
+      #  plight.setPoint( Point3(0, 0, 0) )
+      #  plight.setColor( Vec4(1,1,1,1) )
+      #  plight.setAttenuation( Vec3(0.1, 0.1, 0.005) )
+      #  render.setLight(model.attachNewNode(plight))
+ 
     def checkCollision( self, ship, collectiblelist ):
         if OdeUtil.collide(ship.collGeom, self.collGeom) and ship.hasBall():
             #if ship.hasBall():
