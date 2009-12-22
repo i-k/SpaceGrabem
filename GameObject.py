@@ -34,3 +34,6 @@ class GameObject:
     
     def getPos(self):
         return self.body.getPosition()
+        
+    def getVelocity(self):
+        return self.body.getLinearVel()

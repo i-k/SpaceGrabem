@@ -192,9 +192,8 @@ class Game():
     def loadLights(self):
         light1 = DirectionalLight('light1')
         lightNode1 = render.attachNewNode(light1)
-        lightNode1.lookAt(0,0,0)
         light1.setDirection( Vec3(-1, 0.5, -0.25) )
-        light1.setColor( Vec4(0.7, 0.7, 0.7, 0) )
+        light1.setColor( Vec4(0.6, 0.6, 0.6, 0) )
         render.setLight(lightNode1)
         
     #checks all collectibles for possible collisions with ships

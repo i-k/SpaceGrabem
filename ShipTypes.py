@@ -60,7 +60,8 @@ class Ship_1(Ship):
         plight.setColor( color )
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         plightNodePath = model.attachNewNode(plight)
-        render.setLight(plightNodePath)
+        self.visualNode.setLight(plightNodePath)
+        game.map.agplate.visualNode.setLight(plightNodePath)
         
  # setMoreKeys in ship class = BAD IDEA
     #def setMoreKeys(self):
@@ -158,19 +159,24 @@ class Ship_2(Ship):
         plight.setColor( color )
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         plightNodePath = model.attachNewNode(plight)
-        render.setLight(plightNodePath)
+        self.visualNode.setLight(plightNodePath)
+        game.map.agplate.visualNode.setLight(plightNodePath)
 
         aBurnerOuter = PointLight('aBurnerOuter')
         aBurnerOuter.setPoint( Point3(0, -20, 0) )
         aBurnerOuter.setColor( Vec4(1,0,0,0) )
         aBurnerOuter.setAttenuation( Vec3(0.01, 0.01, 0.01) )
-        render.setLight(model.attachNewNode(aBurnerOuter))
+        outerNode = model.attachNewNode(aBurnerOuter)
+        self.visualNode.setLight(outerNode)
+        game.map.agplate.visualNode.setLight(outerNode)
         
         aBurnerInner = PointLight('aBurnerInner')
         aBurnerInner.setPoint( Point3(0, -25, 0) )
         aBurnerInner.setColor( Vec4(1,1,0,0) )
         aBurnerInner.setAttenuation( Vec3(0.02, 0.02, 0.02) )
-        render.setLight(model.attachNewNode(aBurnerInner))
+        innerNode = model.attachNewNode(aBurnerInner)
+        self.visualNode.setLight(innerNode)
+        game.map.agplate.visualNode.setLight(innerNode)
         self.afterBurner = [aBurnerInner, aBurnerOuter]
         self.afterBurnerOn = False
     

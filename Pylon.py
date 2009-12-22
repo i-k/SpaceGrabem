@@ -19,8 +19,6 @@ class Pylon(StaticObject):
         self.Active = False
         self.RANGE = range
         
-        
-        
         self.collGeom = OdeSphereGeom( self.game.physicsSpace, 3)
         #self.collGeom.setBody(self.body)
         self.collGeom.setCategoryBits( BitMask32(0xffffffff) )
@@ -46,10 +44,6 @@ class Pylon(StaticObject):
             self.offColor = Vec4(0.0, 0.0, -pow/maxPow, 0.0)
             self.onColor = Vec4(0.0, -pow/maxPow, 0.0, 0.0)
             
-        #if (pow/maxPow <= 0.5 and pow/maxPow >= -0.5):
-           # self.offColor = Vec4(0.0, 1.0, 0.0, 0.0)
-            #self.onColor = Vec4(0.0, 0.0, 0.0, 0.0)
-            #self.setColor( self.offColor )
         self.setColor( self.offColor )
             
     def setPos(self, pos):
@@ -73,15 +67,8 @@ class Pylon(StaticObject):
         plight.setColor( color )
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         self.plight = plight
-        plightNodePath = self.model.attachNewNode(self.plight)
-        self.model.setLight(plightNodePath)
-        
-    def setActiveOn(self):
-        self.Active = True
-        
-    def setActiveOff(self):
-        self.Active = False
-        
+        self.plightNodePath = self.model.attachNewNode(self.plight)
+        self.model.setLight(self.plightNodePath)
 
     def setActive(self, active, ship):
         if active == self.Active:
@@ -90,12 +77,10 @@ class Pylon(StaticObject):
             self.whoActivated = ship
             self.plight.setColor(self.onColor)
             self.Active = active
-            #print "moo"
         else:
             if ship == self.whoActivated:
                 self.plight.setColor(self.offColor)
                 self.Active = active
-            
         
     def isActive(self):
         return self.Active
@@ -123,11 +108,9 @@ class Pylon(StaticObject):
             relativepos = [ (shippos[0] - pylonpos[0])  , (shippos[1] - pylonpos[1]) ] 
 #            if (shippos[0] - pylonpos[0]) < 0:
 #                relativepos = []
-           # print "inside the zone"
-           # print str(ship.getShipType())
-           # print str(shippos[0]) + str(shippos[1]) + " mooo " + str(relativepos[0]) + str(relativepos[1])
+
             ship.body.addForce( relativepos[0] * self.POWER, relativepos[1] * self.POWER, 0  )
-            #print str((1.0/(relativepos[0])))
+
     
 #    #checks if collision happens with one ship 
 #    #quite useless, but leaving it anyway

@@ -47,11 +47,11 @@ class Base(StaticObject):
         model = loader.loadModel('Base.egg')
         model.reparentTo(self.visualNode)
         
-      #  plight = PointLight('baselight')
-      #  plight.setPoint( Point3(0, 0, 0) )
-      #  plight.setColor( Vec4(1,1,1,1) )
-      #  plight.setAttenuation( Vec3(0.1, 0.1, 0.005) )
-      #  render.setLight(model.attachNewNode(plight))
+        plight = PointLight('baselight')
+        plight.setPoint( Point3(0, 0, 12) )
+        plight.setColor( Vec4(1,1,1,1) )
+        plight.setAttenuation( Vec3(0.1, 0.1, 0.005) )
+        self.visualNode.setLight(model.attachNewNode(plight))
  
     def checkCollision( self, ship, collectiblelist ):
         if OdeUtil.collide(ship.collGeom, self.collGeom) and ship.hasBall():

@@ -42,7 +42,7 @@ class Pallo(Collectible):
         model.reparentTo(self.visualNode)
 
         plight = PointLight('plight')
-        plight.setPoint( Point3(0.6, 0, 5) )
+        plight.setPoint( Point3(0, 0, 5) )
         plight.setColor( color )
         plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
         plightNodePath = model.attachNewNode(plight)

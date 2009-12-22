@@ -1,5 +1,5 @@
-from StaticObject import bigWall
-from StaticObject import AntiGravityPlate
+from StaticObject import BigWall, AntiGravityPlate
+#from StaticObject import AntiGravityPlate
 from Base import Base
 from Pylon import Pylon
 import ShipTypes
@@ -22,13 +22,13 @@ class Map:
         #subtract 10 so pylons won't spawn inside walls
         self.makeRndPylons( self.game, pylons, (mapX - 10), (mapY - 10) )
         #self.makePylon( self.game, 100, 0, 0)
+        self.makeRndWalls( self.game, pylons/2, (mapX - 10), (mapY - 10) )
         
         #subtract 10 so bases won't spawn inside walls
         self.base1 = self.makeBase( self.game, (mapY - 10) )
         self.base2 = self.makeBase( self.game, -(mapY - 10) )
 
         self.makeBoundaryWalls( self.game, mapX, mapY )
-        
 
         self.makeAntiGravityPlate( self.game, (2*mapX), (2*mapY) )
 
@@ -45,23 +45,19 @@ class Map:
     def getBase2(self):
         return self.base2
 
-    def makeBoundaryWalls(self, game, MapX = 100.0, MapY = 100.0, WallLength = 50.0 ):
-        WALLS = range(1, int(2*(MapX / WallLength ))+1)
-        for Wall in WALLS:
-            BigWall1 = bigWall(game)
-            BigWall1.setPos( Vec3(-MapX + (WallLength*Wall)-(WallLength / 2) , -MapY, 0) )
-            BigWall2 = bigWall(game)
-            BigWall2.setPos( Vec3(-MapX + (WallLength*Wall)-(WallLength / 2) , +MapY, 0) )
-            BigWall3 = bigWall(game)
-            BigWall3.setRotation( 90 )
-            BigWall3.setPos( Vec3(-MapX , -MapY + (WallLength*Wall)-(WallLength / 2), 0) )
-            BigWall4 = bigWall(game)
-            BigWall4.setRotation( 90 )
-            BigWall4.setPos( Vec3(+MapX , -MapY + (WallLength*Wall)-(WallLength / 2), 0) )
-            
+    def makeBoundaryWalls(self, game, mapX = 100.0, mapY = 100.0):
+        wall1 = BigWall(game, 2*mapX)
+        wall1.setPos( Vec3(0, -mapY, 0) )
+        wall2 = BigWall(game, 2*mapX)
+        wall2.setPos( Vec3(0, mapY, 0) )
+        wall3 = BigWall(game, 2*mapY)
+        wall3.setRotation( 90 )
+        wall3.setPos( Vec3(-mapX , 0, 0) )
+        wall4 = BigWall(game, 2*mapY)
+        wall4.setRotation( 90 )
+        wall4.setPos( Vec3(mapX , 0, 0) )
             
     def makePylon(self, game, power, x, y):
-        #spawns a new pylon and adds it to pylonList
         self.pylon = Pylon( game, power )
         self.pylon.setPos( Vec3(x, y, 0) )
         self.pylon.addToPylonList( self.pylonList )
@@ -70,11 +66,15 @@ class Map:
     def makeRndPylons(self, game, amount, mapX, mapY):
         #create n amount of random powered pylons ( power is something between -game.MAX_PYLON_POWER and game.MAX_PYLON_POWER )
         for x in range(amount):
-#            print str(x) + " loop"
             self.makePylon( game,
              random.randrange(-self.game.MAX_PYLON_POWER, self.game.MAX_PYLON_POWER),
              random.randrange( -mapX, mapX ), random.randrange( -mapY, mapY )
              )
+             
+    def makeRndWalls(self, game, amount, mapX, mapY, minWallWidth = 40.0, maxWallWidth=60.0):
+        for x in range(amount):
+            wall = BigWall( game, random.randrange(minWallWidth, maxWallWidth) )
+            wall.setPos( Vec3(random.randrange( -mapX, mapX ), random.randrange( -mapY, mapY ), 0) )
         
     def makeBase(self, game, posY, posX = 0):
         #spawns a base
@@ -83,11 +83,8 @@ class Map:
 
         return self.base
 
-        #palauttaa basen ihan vaan siksi etta saa laitettua johonkin muuttujaan
         #ks. konstruktorissa self.base1 ja 2
         #  saadaan tunnistettua kumman base on kyseessa, 1-pelaajan vaiko 2  
     def makeAntiGravityPlate(self, game, mapX, mapY):
-        #spawns an AntiGravityPlate
         self.agplate = AntiGravityPlate( game, mapX, mapY )
         self.agplate.setPos( Vec3( 0, 0, -5) )
-        #return self.agplate

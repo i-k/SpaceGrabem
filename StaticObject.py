@@ -27,13 +27,13 @@ class StaticObject(GameObject):
         self.visualNode.setHpr( Vec3(self.rotation, 0, 0) )
         pos = self.collGeom.getRotation()
         self.collGeom.setRotation( pos.rotateMat(self.rotation) )
-   
-class bigWall(StaticObject):
+        
+# BigWallin model skaalautuu parametreihin arvoista 50, 4, 1
+class BigWall(StaticObject):
 
-    def __init__(self, game):
+    def __init__(self, game, width=200.0, thickness=4.0, height=1.0):
         self.game = game
-    
-        self.collGeom = OdeBoxGeom( self.game.physicsSpace, 50, 6, 30)
+        self.collGeom = OdeBoxGeom( self.game.physicsSpace, width, thickness, height)
 
         #self.collGeom.setBody(self.body)
         self.collGeom.setCategoryBits( BitMask32(0x000000ff) )#ffffffff) )
@@ -44,6 +44,7 @@ class bigWall(StaticObject):
         self.visualNode.reparentTo(render)
         
         model = loader.loadModel('BigWall.egg')
+        model.setScale(width/50.0, thickness/4.0, height/4.0)
         model.reparentTo(self.visualNode)
         
     def osuminen(self, ship1):
@@ -79,7 +80,7 @@ class AntiGravityPlate(StaticObject):
         
         self.visualNode = NodePath('Visual node')
         model = loader.loadModel('agplate.egg')
-        model.setScale(20)
+        model.setScale(30)
         model.reparentTo(self.visualNode)
         tex = loader.loadTexture('test.png')
 
