@@ -71,9 +71,7 @@ class Base(StaticObject):
                 ship.addPoints(collectible.getValue())
                 collectible.setPos( Vec3(pos[0], pos[1], 50))
                 collectible.setVelocity(x = random.randrange(-10,10), y = (0-pos[1]) / 4)
-                
-                if (self.game.goalSfx.status() == 1):
-                    self.game.goalSfx.play()
+                self.game.goalSfx.play()
                 self.game.updateHUD()
                 print ship.SHIP_TYPE + " " + str(ship.getPoints()) + " Points! by throwing the ball"
 

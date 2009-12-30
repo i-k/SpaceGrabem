@@ -35,7 +35,7 @@ from direct.gui.OnscreenText import OnscreenText
 from direct.gui.OnscreenImage import OnscreenImage
 import direct.directbase.DirectStart
 from direct.filter.CommonFilters import CommonFilters
-
+from direct.task import Task
 
 #from Base import Base
 #from Pylon import Pylon
@@ -43,7 +43,9 @@ from Map import Map
 import ShipTypes
 import CollectibleTypes
 #import StaticObject
-import math
+import math, random
+from collections import deque
+
 
 class Game():
 
@@ -52,9 +54,12 @@ class Game():
     MAX_PYLON_POWER = 50
 
     def __init__(self):
+
+        self.zoomLevels = deque([640, 512, 320, 1280])
+        self.curLev = self.zoomLevels[0]
+        
         base.disableMouse()
-        base.camera.setPos(0,0,640)
-        base.camera.lookAt(0,0,0)
+        self.initCam()
         
         self.loadPhysics()
         self.loadLights()
@@ -91,14 +96,16 @@ class Game():
         
         self.collisionSfx = loader.loadSfx("shipcollision.wav")
         self.goalSfx = loader.loadSfx("goal.wav")
-        self.victorySfx = loader.loadSfx("victory.mp3")
+        self.victorySfx = loader.loadSfx("victory.wav")
         self.collision2Sfx = loader.loadSfx("pyloncollision.wav")
         
         filters = CommonFilters(base.win, base.cam)
         render.setShaderAuto()
         
         taskMgr.add(self.loop, 'game loop')
-        taskMgr.add( self.chaseBallsAround, name='Simple AI', sort=None, extraArgs=(self.ship1, self.ship2, self.collectibleList, self.map.getBase1()), priority=None, uponDeath=None, appendTask=True, taskChain=None, owner=None)
+        taskMgr.add( self.chaseBallsAround, name='Simple AI', sort=None,
+                     extraArgs=(self.ship1, self.ship2, self.collectibleList, self.map.getBase1()),
+                     priority=None, uponDeath=None, appendTask=True, taskChain=None, owner=None)
         
         run()
         
@@ -123,7 +130,7 @@ class Game():
         base.accept('s-up', self.ship2.thrustBackOff) 
         base.accept('q', self.ship2.releaseBall)
         
-        
+        base.accept('+', self.zoom)
         
     def loadPhysics(self):
         self.physicsWorld = OdeWorld()
@@ -268,5 +275,25 @@ class Game():
             chaser.thrustOff()
             chaser.thrustBackOff()
         return task.cont
+
+    def initCam(self):
+        base.camera.setPos(0,0,self.curLev)
+        base.camera.lookAt(0,0,0)
+
+    def zoom(self):
+        self.curLev = self.zoomLevels.popleft()
+        base.camera.setPos(0, 0, self.curLev)
+        self.zoomLevels.append(self.curLev)
+
+    def shakeCam(self):
+        taskMgr.add(self.shakeCamTask, name='ShakeCam')
+    
+    def shakeCamTask(self, task):
+        oldPos = base.camera.getPos()
+        base.camera.setPos(oldPos[0]+random.randint(-1, 1), oldPos[1]+random.randint(-1, 1), oldPos[2]+random.randint(-4, 4))
+        if task.time < 0.5:
+            return task.cont
+        self.initCam()
+        return task.done
     
 game = Game()

@@ -129,8 +129,7 @@ class Pylon(StaticObject):
             #self.usingTheForce( ship )
             if OdeUtil.collide(ship.collGeom, self.collGeom) and ship.hasBall():
                 #ship.Ball.Restore(ship)
-                if (self.game.collision2Sfx.status() == 1):
-                    self.game.collision2Sfx.play()
+                self.game.collision2Sfx.play()
                 pos = ship.getPos()
                 ship.dropBall(x = pos[0], y = pos[1], z = 30, linX = ( (0-pos[0])/7 ), linY = ( (0-pos[1])/7 ), linZ = 2)
                 print str(ship.getShipType()) + " lost its balls! NOOOO!"
