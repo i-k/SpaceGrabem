@@ -19,6 +19,8 @@ class Map:
         self.game = game
         self.pylonList = []
 
+        self.walls = render.attachNewNode("Walls")
+
         #subtract 10 so pylons won't spawn inside walls
         self.makeRndPylons( self.game, pylons, (mapX - 10), (mapY - 10) )
         #self.makePylon( self.game, 100, 0, 0)
@@ -48,14 +50,19 @@ class Map:
     def makeBoundaryWalls(self, game, mapX = 100.0, mapY = 100.0):
         wall1 = BigWall(game, 2*mapX)
         wall1.setPos( Vec3(0, -mapY, 0) )
+        wall1.visualNode.reparentTo(self.walls)
         wall2 = BigWall(game, 2*mapX)
         wall2.setPos( Vec3(0, mapY, 0) )
+        wall2.visualNode.reparentTo(self.walls)
         wall3 = BigWall(game, 2*mapY)
         wall3.setRotation( 90 )
         wall3.setPos( Vec3(-mapX , 0, 0) )
+        wall3.visualNode.reparentTo(self.walls)
         wall4 = BigWall(game, 2*mapY)
         wall4.setRotation( 90 )
         wall4.setPos( Vec3(mapX , 0, 0) )
+        wall4.visualNode.reparentTo(self.walls)
+        
             
     def makePylon(self, game, power, x, y):
         self.pylon = Pylon( game, power )
@@ -75,6 +82,7 @@ class Map:
         for x in range(amount):
             wall = BigWall( game, random.randrange(minWallWidth, maxWallWidth) )
             wall.setPos( Vec3(random.randrange( -mapX, mapX ), random.randrange( -mapY, mapY ), 0) )
+            wall.visualNode.reparentTo(self.walls)
         
     def makeBase(self, game, posY, posX = 0):
         #spawns a base

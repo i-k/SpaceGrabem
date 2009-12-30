@@ -258,7 +258,7 @@ class Game():
         else:
             for collectible in chaseList:
                 chasePos = collectible.getPos()
-                relPos = [ pos[0] - chasePos[0], pos[1] - cPos[1] ]
+                relPos = [ pos[0] - chasePos[0], pos[1] - chasePos[1] ]
                 if (math.fabs(relPos[0]) + math.fabs(relPos[1])) < nearestNormedPos:
                     nearestNormedPos = math.fabs(relPos[0]) + math.fabs(relPos[1])
                     nearestRelPos = relPos
