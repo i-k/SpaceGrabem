@@ -37,12 +37,9 @@ import direct.directbase.DirectStart
 from direct.filter.CommonFilters import CommonFilters
 from direct.task import Task
 
-#from Base import Base
-#from Pylon import Pylon
 from Map import Map
 import ShipTypes
 import CollectibleTypes
-#import StaticObject
 import math, random
 from collections import deque
 
@@ -103,9 +100,6 @@ class Game():
         render.setShaderAuto()
         
         taskMgr.add(self.loop, 'game loop')
-        taskMgr.add( self.chaseBallsAround, name='Simple AI', sort=None,
-                     extraArgs=(self.ship1, self.ship2, self.collectibleList, self.map.getBase1()),
-                     priority=None, uponDeath=None, appendTask=True, taskChain=None, owner=None)
         
         run()
         
@@ -131,6 +125,7 @@ class Game():
         base.accept('q', self.ship2.releaseBall)
         
         base.accept('+', self.zoom)
+        base.accept('p', self.toggleAI)
         
     def loadPhysics(self):
         self.physicsWorld = OdeWorld()
@@ -242,20 +237,28 @@ class Game():
         self.contactGroup.empty()
         return task.cont
         
+    def toggleAI(self):
+		if taskMgr.hasTaskNamed('Simple AI'):
+			taskMgr.remove('Simple AI')
+			return
+		taskMgr.add( self.chaseBallsAround, name='Simple AI', sort=None,
+                     extraArgs=(self.ship1, self.ship2, self.collectibleList, self.map.getBase1()),
+                     priority=None, uponDeath=None, appendTask=True, taskChain=None, owner=None)
+		
     def chaseBallsAround(self, chaser, enemy, chaseList, base, task):
         pos = chaser.getPos()
         nearestNormedPos = 1e10000 
         nearestRelPos = [0,0]
         if chaser.hasBall():
-            basePos = base.getPos()
-            nearestRelPos = [ pos[0] - basePos[0], pos[1] - basePos[1] ]
+            chasePos = base.getPos()
+            nearestRelPos = [ pos[0] - chasePos[0], pos[1] - chasePos[1] ]
         elif enemy.hasBall():
-            enemyPos = enemy.getPos()
-            nearestRelPos = [ pos[0] - enemyPos[0], pos[1] - enemyPos[1] ]
+            chasePos = enemy.getPos()
+            nearestRelPos = [ pos[0] - chasePos[0], pos[1] - chasePos[1] ]
         else:
             for collectible in chaseList:
-                cPos = collectible.getPos()
-                relPos = [ pos[0] - cPos[0], pos[1] - cPos[1] ]
+                chasePos = collectible.getPos()
+                relPos = [ pos[0] - chasePos[0], pos[1] - cPos[1] ]
                 if (math.fabs(relPos[0]) + math.fabs(relPos[1])) < nearestNormedPos:
                     nearestNormedPos = math.fabs(relPos[0]) + math.fabs(relPos[1])
                     nearestRelPos = relPos
