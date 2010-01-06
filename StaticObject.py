@@ -35,7 +35,7 @@ class StaticObject(GameObject):
 # BigWallin model skaalautuu parametreihin arvoista 50, 4, 1
 class BigWall(StaticObject):
 
-    def __init__(self, game, width=200.0, thickness=4.0, height=1.0):
+    def __init__(self, game, width=200.0, thickness=4.0, height=10):
         self.game = game
         self.collGeom = OdeBoxGeom( self.game.physicsSpace, width, thickness, height)
 
@@ -48,8 +48,9 @@ class BigWall(StaticObject):
         self.visualNode.reparentTo(render)
         
         model = loader.loadModel('BigWall.egg')
-        model.setScale(width/50.0, thickness/4.0, height/4.0)
+        model.setScale(width/50.0, thickness/4.0, height)
         model.reparentTo(self.visualNode)
+        model.setZ(266)
         
     def osuminen(self, ship1):
          if OdeUtil.collide(ship1.collGeom, self.collGeom):
