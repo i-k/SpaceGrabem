@@ -2,11 +2,15 @@ from GameObject import GameObject
 
 from pandac.PandaModules import (
 Vec3,
+Vec4,
+Point3,
+PointLight,
 OdeBoxGeom,
 NodePath,
 BitMask32,
 OdeUtil,
-Texture
+Texture,
+TextureStage
 )
 
 class StaticObject(GameObject):
@@ -80,10 +84,12 @@ class AntiGravityPlate(StaticObject):
         
         self.visualNode = NodePath('Visual node')
         model = loader.loadModel('agplate.egg')
+        ts = TextureStage('ts')
+        ts.setMode(TextureStage.MReplace)
+        tex = loader.loadTexture('nanadm1.jpg')
+        model.setTexture(tex, 1)
         model.setScale(30)
         model.reparentTo(self.visualNode)
-        tex = loader.loadTexture('test.png')
-
-        self.visualNode.setTexture(tex, 1)
         self.visualNode.reparentTo(render)
+        
 

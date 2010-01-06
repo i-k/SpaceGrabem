@@ -62,7 +62,6 @@ class Game():
         #map x boundary, map y boundary, amount of pylons
         self.map = Map(self, 150.0, 150.0, 7)
 
-        #alustaa tyhjan listan
         self.shipList = []
         self.ship1 = ShipTypes.Ship_1(self, Vec4(0.6, 0.0, 0.0, 0.0))
         self.ship2 = ShipTypes.Ship_2(self, Vec4(0.0, 0.0, 0.6, 0.0))
@@ -237,7 +236,7 @@ class Game():
         
     def chaseBallsAround(self, chaser, enemy, chaseList, base, task):
         pos = chaser.getPos()
-        nearestNormedPos = 1e10000 
+        nearestNormedPos = 1e10000 #represents infinity
         nearestRelPos = [0,0]
         if chaser.hasBall():
             basePos = base.getPos()

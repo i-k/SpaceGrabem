@@ -58,7 +58,7 @@ class Ship_1(Ship):
         plight = PointLight('plight')
         plight.setPoint( Point3(0.6, 0, 5) )
         plight.setColor( color )
-        plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
+        plight.setAttenuation( Vec3(0.1, 0.01, 0.01) )
         plightNodePath = model.attachNewNode(plight)
         self.visualNode.setLight(plightNodePath)
         game.map.agplate.visualNode.setLight(plightNodePath)
@@ -108,7 +108,7 @@ class Ship_2(Ship):
     
     def __init__(self, game, color):
 
-        self.POWER = 1000
+        self.POWER = 1200
         self.game = game
         self.SHIP_TYPE = "RAKETTI"
         self.Ball_offset = 10.0

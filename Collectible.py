@@ -26,16 +26,7 @@ from GameObject import GameObject
 
 class Collectible(GameObject):
    
-   
-    #selvita miten saisi jonkun id:n joka collectible-oliolle
-    #tarvitaan etta voidaan poistaa vain se tietty olio 
-    #listasta
-    
-    #ongelmana on etta voi olla eri maara collectibleja
-    
-    #new collectible always added to start of list,
-    #but can't be sure that the collectible that
-    #needs to be deleted will still be the first
+
     
     #if-lause, kay lapi koko listan, tutkii id-numeron?
     #jos id numero = poistettavan id numero, poistetaan?

@@ -42,11 +42,11 @@ class Pallo(Collectible):
         model.reparentTo(self.visualNode)
 
         plight = PointLight('plight')
-        plight.setPoint( Point3(0, 0, 5) )
+        plight.setPoint( Point3(0, 0, 3) )
         plight.setColor( color )
-        plight.setAttenuation( Vec3(0.5, 0.01, 0.01) )
-        plightNodePath = model.attachNewNode(plight)
-        model.setLight(plightNodePath)
+        plight.setAttenuation( Vec3(0.05, 0.01, 0.01) )
+        self.plightNodePath = model.attachNewNode(plight)
+        model.setLight(self.plightNodePath)
 
         self.body = OdeBody(game.physicsWorld)
         self.mass = OdeMass()
@@ -70,7 +70,6 @@ class Pallo(Collectible):
         
         for ship in shipList:
             if OdeUtil.areConnected(ship.body, self.body) and not ship.hasBall():
-                            
                 self.PowerUpEffect(ship)
 
     def PowerUpEffect(self, ship):
@@ -78,6 +77,7 @@ class Pallo(Collectible):
         ship.addPower(-(self.DRAIN))
         ship.gotBall(self)
         self.hideObject()
+        ship.visualNode.setLight(self.plightNodePath)
         
         #print player
         print ship.SHIP_TYPE + " lost " + str(self.DRAIN) + " power!!"
@@ -86,6 +86,7 @@ class Pallo(Collectible):
       #  ship.mass.add(self.mass)
         ship.addPower(self.DRAIN)
         self.showObject()
+        ship.visualNode.clearLight(self.plightNodePath)
         #self.setPos( Vec3(random.randrange(30), random.randrange(40), 0))
         #ship.dropBall()
         #print player
