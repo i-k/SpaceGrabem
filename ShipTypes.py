@@ -165,18 +165,21 @@ class Ship_2(Ship):
         aBurnerOuter = PointLight('aBurnerOuter')
         aBurnerOuter.setPoint( Point3(0, -20, 0) )
         aBurnerOuter.setColor( Vec4(1,0,0,0) )
-        aBurnerOuter.setAttenuation( Vec3(0.01, 0.01, 0.01) )
+        aBurnerOuter.setAttenuation( Vec3(1, 1, 1) )
         outerNode = model.attachNewNode(aBurnerOuter)
         self.visualNode.setLight(outerNode)
         game.map.agplate.visualNode.setLight(outerNode)
+        game.map.walls.setLight(outerNode)
         
         aBurnerInner = PointLight('aBurnerInner')
         aBurnerInner.setPoint( Point3(0, -25, 0) )
         aBurnerInner.setColor( Vec4(1,1,0,0) )
-        aBurnerInner.setAttenuation( Vec3(0.02, 0.02, 0.02) )
+        aBurnerInner.setAttenuation( Vec3(1, 1, 1) )
         innerNode = model.attachNewNode(aBurnerInner)
         self.visualNode.setLight(innerNode)
         game.map.agplate.visualNode.setLight(innerNode)
+        game.map.walls.setLight(innerNode)
+        
         self.afterBurner = [aBurnerInner, aBurnerOuter]
         self.afterBurnerOn = False
     

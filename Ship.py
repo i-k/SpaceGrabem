@@ -148,11 +148,12 @@ class Ship(GameObject):
         self.setPos( Vec3(pos[0], pos[1], 0) )
 
     def shipsCollide(self, enemy):
-        if OdeUtil.areConnected(self.body, enemy.body) and (self.game.collisionSfx.status() == 1):
+        if OdeUtil.areConnected(self.body, enemy.body):
             highest = max(self.getVelocity())
             eneHighest = max(enemy.getVelocity())
             if highest > eneHighest:
                 enemy.releaseBall()
             else:
                 self.releaseBall()
+                self.game.shakeCam()
             self.game.collisionSfx.play()
