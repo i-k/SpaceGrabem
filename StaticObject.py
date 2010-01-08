@@ -43,7 +43,7 @@ class BigWall(StaticObject):
         self.collGeom.setCategoryBits( BitMask32(0x000000ff) )#ffffffff) )
         self.collGeom.setCollideBits( BitMask32(0x000000ff) )
         
-        #remember to make wall model with "50" length... no idea 50 what, though
+        
         self.visualNode = NodePath('Visual node')
         self.visualNode.reparentTo(render)
         
@@ -51,6 +51,9 @@ class BigWall(StaticObject):
         model.setScale(width/50.0, thickness/4.0, height)
         model.reparentTo(self.visualNode)
         model.setZ(266)
+#        tex = loader.loadTexture('seina.jpg')
+#        model.setTexture(tex, 1)
+        
         
     def osuminen(self, ship1):
          if OdeUtil.collide(ship1.collGeom, self.collGeom):
@@ -85,9 +88,9 @@ class AntiGravityPlate(StaticObject):
         
         self.visualNode = NodePath('Visual node')
         model = loader.loadModel('agplate.egg')
-        ts = TextureStage('ts')
-        ts.setMode(TextureStage.MReplace)
-        tex = loader.loadTexture('nanadm1.jpg')
+#        ts = TextureStage('ts')
+#        ts.setMode(TextureStage.MReplace)
+        tex = loader.loadTexture('agplatetex.jpg')
         model.setTexture(tex, 1)
         model.setScale(30)
         model.reparentTo(self.visualNode)
