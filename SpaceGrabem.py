@@ -165,15 +165,16 @@ class Game():
             align = TextNode.ALeft,
             scale = Game.HUD_TEXT_SCALE
         )
+
         
         self.winnerText = OnscreenText(
             text = "Tekstia, tekstia, tekstia",
             fg = (1,1,1,1),
-            pos = (-0.25, 0),
+            pos = (-0.2, 0),
             align = TextNode.ALeft,
-            scale = Game.HUD_TEXT_SCALE
+            scale = Game.HUD_TEXT_SCALE*3
         )
-        self.winnerText.setZ(600)
+#        self.winnerText.setZ(200)
         self.winnerText.hide()
 
     def updateHUD(self):
@@ -183,11 +184,13 @@ class Game():
             self.winnerText.show()
             self.winnerText.setText( "Player 1 won " + str(self.ship1.getPoints()) + "-" + str(self.ship2.getPoints()))
             self.victorySfx.play()
+            base.cam.node().getDisplayRegion(0).setSort(0)
 #            self.Pause()
         if (self.ship2.getPoints() > 9):
             self.winnerText.show()
             self.winnerText.setText( "Player 2 won " + str(self.ship2.getPoints()) + "-" + str(self.ship1.getPoints()))
             self.victorySfx.play()
+            base.cam.node().getDisplayRegion(0).setSort(0)
 
 
     def loadLights(self):
